@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CoinCraft"
+rootProject.name = "FP Mobdev"
 include(":app")
  
