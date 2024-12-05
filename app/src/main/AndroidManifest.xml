@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FPMobdev"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityKT"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
