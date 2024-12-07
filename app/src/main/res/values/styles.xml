@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Style for Hint Text -->
+    <style name="HintTextStyle">
+        <item name="android:fontFamily">@font/silkscreen</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Style for Input Text -->
+    <style name="InputTextStyle">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>
