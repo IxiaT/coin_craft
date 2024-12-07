@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CoinCraft</string>
+
+    <string name="topbartxt">
+    Debt Tracker
+    </string>
+
 </resources>
