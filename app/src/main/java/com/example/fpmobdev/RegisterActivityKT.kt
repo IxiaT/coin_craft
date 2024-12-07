@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.EdgeToEdge
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -31,7 +31,7 @@ class RegisterActivityKT : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        EdgeToEdge.enable(this)
+        enableEdgeToEdge()
 
         firebaseAuth = FirebaseAuth.getInstance()
         databaseReference = FirebaseDatabase.getInstance("https://fp-mobdev-default-rtdb.asia-southeast1.firebasedatabase.app/")
