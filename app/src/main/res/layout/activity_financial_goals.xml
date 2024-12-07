@@ -7,4 +7,206 @@
     android:layout_height="match_parent"
     tools:context=".FinancialGoalsActivity">
 
+    <LinearLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:background="#FFD700"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageButton
+            android:id="@+id/backbtn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="25dp"
+            app:srcCompat="@drawable/backbtn" />
+
+        <TextView
+            android:id="@+id/topbartxt"
+            android:layout_width="200dp"
+            android:layout_height="33dp"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:lineSpacingExtra="8sp"
+            android:fontFamily="@font/silkscreen_bold"
+            android:text="FINANCIAL GOALS"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rectangle_1"
+        android:layout_width="380dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="385dp"
+        android:background="@drawable/rectangle_1"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/financialGoalProgress"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:indicatorSize="160dp"
+            app:trackThickness="7dp"
+            app:indicatorColor="#FFD700"
+            app:trackColor="#808080"
+            android:indeterminate="false"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/progressPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/silkscreen_regular"
+            android:text="0%"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            android:layout_centerInParent="true"/>
+
+<!--        <FrameLayout-->
+<!--            xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="300dp"-->
+<!--            android:layout_gravity="center">-->
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progressBar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:progressDrawable="@drawable/custom_progress_drawable"-->
+<!--                android:indeterminateOnly="false"-->
+<!--                android:max="100"-->
+<!--                android:progress="85"-->
+<!--                android:rotation="45"-->
+<!--                android:layout_gravity="center" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="85%"-->
+<!--                android:textSize="32sp"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:layout_gravity="center" />-->
+<!--        </FrameLayout>-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rectangle_2"
+        android:layout_width="380dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="-15dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="385dp"
+        android:background="@drawable/rectangle_1"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle_1">
+
+        <TextView
+            android:id="@+id/saved"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="35dp"
+            android:text="SAVED"
+            android:fontFamily="@font/silkscreen_regular"
+            android:lineSpacingExtra="-3sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="18dp"
+            android:textColor="#8C8C8C"
+            />
+
+        <View
+            android:id="@+id/coin_1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/coin_1" />
+
+        <TextView
+            android:id="@+id/saved_balance"
+            android:layout_width="115dp"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="55dp"
+            android:fontFamily="@font/silkscreen_regular"
+            android:layout_marginTop="64dp"
+            android:lineSpacingExtra="-4sp"
+            android:text="42500.00"
+            android:textColor="@color/white"
+            android:textSize="20dp"/>
+
+        <View
+            android:id="@+id/line_8"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/line_8" />
+
+        <TextView
+            android:id="@+id/planned"
+            android:layout_width="95dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="35dp"
+            android:text="PLANNED"
+            android:fontFamily="@font/silkscreen_regular"
+            android:lineSpacingExtra="-3sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="18dp"
+            android:textColor="#8C8C8C"
+            />
+
+        <View
+            android:id="@+id/coin_2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="65dp"
+            android:layout_marginRight="145dp"
+            android:background="@drawable/coin_1" />
+
+        <TextView
+            android:id="@+id/planned_balance"
+            android:layout_width="115dp"
+            android:layout_height="23dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="25dp"
+            android:fontFamily="@font/silkscreen_regular"
+            android:layout_marginTop="64dp"
+            android:lineSpacingExtra="-4sp"
+            android:text="50000.00"
+            android:textColor="@color/white"
+            android:textSize="20dp"/>
+
+    </RelativeLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
