@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GoalsAdapter(
     private val context: Context,
-    private val goals: MutableList<Goal>
+    private val goals: MutableList<Goal>,
+    private val updateBalanceListener: UpdateBalanceListener
 ) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
@@ -26,20 +27,37 @@ class GoalsAdapter(
         holder.goalIcon.setImageResource(goal.icon)
         holder.goalName.text = goal.name
         holder.goalProgress.text = "${goal.saved} / ${goal.target} - ${goal.percentage}%"
-        holder.goalRemaining.text = "${goal.remaining}"
+
+        // Ensure the remaining balance is displayed as a whole number
+        val remaining = if (goal.remaining < 0) 0.0 else goal.remaining // Prevent negative remaining
+        holder.goalRemaining.text = String.format("%.0f", remaining) // Display as whole number without decimals
+
         holder.goalProgressBar.progress = goal.percentage
 
         // Set color of the progress bar
-        val color = if (goal.percentage >= 100) R.color.green else R.color.default_color
+        val progressColor = if (goal.percentage >= 100) R.color.green else R.color.default_color
         holder.goalProgressBar.progressDrawable.setColorFilter(
-            ContextCompat.getColor(context, color),
+            ContextCompat.getColor(context, progressColor),
             android.graphics.PorterDuff.Mode.SRC_IN
         )
+
+        // Set the color of the remaining balance text (goal_remaining)
+        if (goal.percentage >= 100) {
+            // If the goal is 100% or more, set the remaining balance text to green
+            holder.goalRemaining.setTextColor(ContextCompat.getColor(context, R.color.green))
+        } else {
+            // Otherwise, keep the default color
+            holder.goalRemaining.setTextColor(ContextCompat.getColor(context, R.color.red)) // or your default color
+        }
 
         // Item click listener
         holder.itemView.setOnClickListener {
             openDialog(goal, position)
         }
+    }
+
+    interface UpdateBalanceListener {
+        fun onGoalUpdated() // This will be called when a goal is updated
     }
 
     override fun getItemCount(): Int = goals.size
@@ -67,6 +85,7 @@ class GoalsAdapter(
                 tvCurrentBalance.text = "Current Balance: ${goal.saved}"
                 // Notify item change so it updates in RecyclerView
                 notifyItemChanged(position)
+                updateBalanceListener.onGoalUpdated()
             } else {
                 Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
             }
@@ -82,6 +101,7 @@ class GoalsAdapter(
                 tvCurrentBalance.text = "Current Balance: ${goal.saved}"
                 // Notify item change so it updates in RecyclerView
                 notifyItemChanged(position)
+                updateBalanceListener.onGoalUpdated()
             } else {
                 Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
             }
@@ -94,6 +114,7 @@ class GoalsAdapter(
             // Notify RecyclerView that an item has been removed
             notifyItemRemoved(position)
             dialog.dismiss()
+            updateBalanceListener.onGoalUpdated()
 
             // Optionally, if you want to refresh the entire list
             notifyDataSetChanged() // Uncomment this if needed
