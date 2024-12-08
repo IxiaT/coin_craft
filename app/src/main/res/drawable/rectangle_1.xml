@@ -19,7 +19,7 @@
             </group>
         </vector>
     </item>
-    <item android:right="5dp" android:bottom="8dp">
+    <item android:right="3dp" android:bottom="5dp">
         <vector
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:aapt="http://schemas.android.com/aapt"
