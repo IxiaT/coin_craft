@@ -45,7 +45,7 @@ class DebtCardAdapterL(
         val txtName: TextView = itemView.findViewById(R.id.txtname)
         val txtDate: TextView = itemView.findViewById(R.id.txtdate)
         val coinImg: ImageView = itemView.findViewById(R.id.coinimg)
-        val txtAmount: TextView = itemView.findViewById(R.id.txtamount)
+        val txtAmount: TextView = itemView.findViewById(R.id.txtdate)
         val btnPlus: ImageButton = itemView.findViewById(R.id.btnplus)
         val btnMinus: ImageButton = itemView.findViewById(R.id.btnminus)
     }

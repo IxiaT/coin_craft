@@ -2,11 +2,13 @@ package com.example.coincraft
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class DebtTrackerActivity : AppCompatActivity() {
+class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAddedListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViews: RecyclerView
@@ -14,11 +16,20 @@ class DebtTrackerActivity : AppCompatActivity() {
     private lateinit var adapters: DebtCardAdapterS
     private lateinit var cardList: ArrayList<DebtCardModelL>
     private lateinit var cardLists: ArrayList<DebtCardModelS>
+    private lateinit var addDebtButton: ImageButton
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debt_tracker)
+
+
+        addDebtButton = findViewById(R.id.newdebtbtn)
+        addDebtButton.setOnClickListener {
+            val dialog = NewDebtDialogFragment()
+            dialog.show(supportFragmentManager, "NewDebtDialog")
+        }
+
 
         recyclerView = findViewById(R.id.rview_topdebts)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -107,5 +118,19 @@ class DebtTrackerActivity : AppCompatActivity() {
 
         adapters = DebtCardAdapterS(this, cardLists)
         recyclerViews.adapter = adapters
+    }
+
+    override fun onDebtAdded(amount: String, name: String, date: String) {
+        // Handle the data sent from the dialog
+        cardLists.add(
+            DebtCardModelS(
+                profileImage = R.drawable.avatar, // Adjust based on your implementation
+                name = name,
+                date = date,
+                coinImage = R.drawable.coin,
+                amount = amount
+            )
+        )
+        adapters.notifyDataSetChanged()
     }
 }
