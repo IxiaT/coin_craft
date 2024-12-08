@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-            val user = User("example@test.com", "TestUser", "password123")
+            val user = User("example@test.com", "TestUser", "password123",100.0,0.0)
         database.saveUser("user123", user, object : Database.OnDatabaseActionCompleteListener {
             override fun onSuccess() {
                 println("User saved successfully!")
