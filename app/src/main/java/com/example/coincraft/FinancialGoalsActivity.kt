@@ -17,7 +17,7 @@ class FinancialGoalsActivity : AppCompatActivity() {
     private lateinit var goalList: MutableList<Goal>
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
-    private var savedBalance: Double = 42500.0
+    private var savedBalance: Double = 34661.0
     private var plannedBalance: Double = 50000.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class FinancialGoalsActivity : AppCompatActivity() {
 
         // Sample goal data
         goalList = mutableListOf(
-            Goal("Mother's Day", R.drawable.ic_goal_icon, 800.0, 1000.0),
+            Goal("Mother's Day", R.drawable.ic_goal_icon, 1000.0, 1000.0),
             Goal("Boracay", R.drawable.ic_goal_icon, 1500.0, 3000.0),
             Goal("iPhone 16", R.drawable.ic_goal_icon, 7500.0, 30000.0),
             Goal("Shoes", R.drawable.ic_goal_icon, 3250.0, 5000.0)
@@ -98,5 +98,12 @@ class FinancialGoalsActivity : AppCompatActivity() {
         // Update progress indicator
         val progressIndicator = findViewById<CircularProgressIndicator>(R.id.financialGoalProgress)
         progressIndicator.progress = progressPercentage
+
+        // Change color of the progress bar to green if 100%
+        if (progressPercentage >= 100) {
+            progressIndicator.setIndicatorColor(getColor(R.color.green)) // Ensure you have a green color in your resources
+        } else {
+            progressIndicator.setIndicatorColor(getColor(R.color.default_color)) // Reset to default color
+        }
     }
 }

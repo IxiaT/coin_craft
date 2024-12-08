@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gray background (track) -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="#D3D3D3"/> <!-- Light gray color for background -->
+            <corners android:radius="8dp"/>  <!-- Rounded corners for the progress bar -->
+        </shape>
+    </item>
+
+    <!-- Green color for progress when the goal is complete (100%) -->
+    <item android:id="@android:id/progress">
+        <shape>
+            <solid android:color="#4CAF50"/> <!-- Green color for progress -->
+            <corners android:radius="8dp"/>  <!-- Rounded corners for the progress bar -->
+        </shape>
+    </item>
+</layer-list>

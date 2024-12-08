@@ -102,6 +102,7 @@
                     android:id="@+id/saved"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/silkscreen_regular"
                     android:gravity="center"
                     android:text="SAVED"
@@ -155,6 +156,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/silkscreen_regular"
                     android:gravity="center"
+                    android:layout_marginBottom="5dp"
                     android:text="PLANNED"
                     android:textColor="#8C8C8C"
                     android:textSize="18sp" />
@@ -217,7 +219,7 @@
             android:layout_weight="1" />
 
         <!-- Right Section: Add Goal Button -->
-        <ImageView
+        <ImageButton
             android:id="@+id/addgoalbtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
