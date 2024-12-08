@@ -9,13 +9,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CardAdapterL(
+
+class DebtCardAdapterS(
     private val context: Context,
-    private val cardList: List<CardModelL>
-) : RecyclerView.Adapter<CardAdapterL.CardViewHolder>() {
+    private val cardList: List<DebtCardModelS>
+) : RecyclerView.Adapter<DebtCardAdapterS.CardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.debtcard_large, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.debtcard_small, parent, false)
         return CardViewHolder(view)
     }
 
@@ -27,13 +28,10 @@ class CardAdapterL(
         holder.coinImg.setImageResource(card.coinImage)
         holder.txtAmount.text = card.amount
 
-        holder.btnPlus.setOnClickListener {
+        holder.btnSelect.setOnClickListener {
             // Add your functionality for the plus button
         }
 
-        holder.btnMinus.setOnClickListener {
-            // Add your functionality for the minus button
-        }
     }
 
     override fun getItemCount(): Int {
@@ -41,12 +39,12 @@ class CardAdapterL(
     }
 
     class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val profileImg: ImageView = itemView.findViewById(R.id.profileimg)
-        val txtName: TextView = itemView.findViewById(R.id.txtname)
-        val txtDate: TextView = itemView.findViewById(R.id.txtdate)
-        val coinImg: ImageView = itemView.findViewById(R.id.coinimg)
-        val txtAmount: TextView = itemView.findViewById(R.id.txtamount)
-        val btnPlus: ImageButton = itemView.findViewById(R.id.btnplus)
-        val btnMinus: ImageButton = itemView.findViewById(R.id.btnminus)
+        val profileImg: ImageView = itemView.findViewById(R.id.profileimg_s)
+        val txtName: TextView = itemView.findViewById(R.id.txtname_s)
+        val txtDate: TextView = itemView.findViewById(R.id.txtdate_s)
+        val coinImg: ImageView = itemView.findViewById(R.id.imgcoin_s)
+        val txtAmount: TextView = itemView.findViewById(R.id.txtamount_s)
+        val btnSelect: ImageButton = itemView.findViewById(R.id.imgbtn_select)
     }
+
 }

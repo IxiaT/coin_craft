@@ -1,6 +1,6 @@
 package com.example.coincraft
 
-class CardModelL(
+class DebtCardModelL(
     var profileImage: Int,
     var name: String,
     var date: String,
