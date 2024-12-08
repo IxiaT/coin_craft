@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,16 @@ class FinancialGoalsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_financial_goals)
+
+        // Find the Add Goal Button
+        val addGoalBtn: ImageButton = findViewById(R.id.addgoalbtn)
+
+        // Set the click listener for the button
+        addGoalBtn.setOnClickListener {
+            // Show the Add Goal Dialog
+            val dialogFragment = AddGoalDialogFragment()
+            dialogFragment.show(supportFragmentManager, "AddGoalDialog")
+        }
 
         // Initialize views
         val progressIndicator = findViewById<CircularProgressIndicator>(R.id.financialGoalProgress)

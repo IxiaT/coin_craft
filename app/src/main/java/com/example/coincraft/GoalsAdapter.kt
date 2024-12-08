@@ -27,7 +27,7 @@ class GoalsAdapter(
         holder.goalIcon.setImageResource(goal.icon)
         holder.goalName.text = goal.name
         holder.goalProgress.text = "${goal.saved} / ${goal.target} - ${goal.percentage}%"
-        holder.goalRemaining.text = "-${goal.remaining}"
+        holder.goalRemaining.text = "${goal.remaining}"
 
         // Set the progress of the progress bar based on the percentage
         holder.goalProgressBar.progress = goal.percentage
