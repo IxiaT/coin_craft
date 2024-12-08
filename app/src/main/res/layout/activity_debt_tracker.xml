@@ -56,15 +56,14 @@
         app:layout_constraintTop_toBottomOf="@+id/topbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView3"
+        android:id="@+id/rview_topdebts"
         android:layout_width="409dp"
-        android:layout_height="200dp"
+        android:layout_height="275dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="1dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -75,9 +74,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
         android:text="YOUR DEBTS"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="324dp" />
+        app:layout_constraintTop_toBottomOf="@+id/rview_topdebts" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView4"
@@ -92,8 +92,8 @@
         android:id="@+id/imageButton2"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="118dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView4"
         app:srcCompat="@drawable/newbtn" />
