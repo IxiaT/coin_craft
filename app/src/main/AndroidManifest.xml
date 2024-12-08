@@ -26,7 +26,14 @@
         <!-- RegisterActivity -->
         <activity
             android:name=".RegisterActivity"
-            android:exported="true" />
+            android:exported="false" />
+
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+
+        <activity android:name=".ExpenseTracker"
+            android:exported="false" />
 
     </application>
 
