@@ -88,7 +88,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isValidPassword(password: String): Boolean {
-        val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*+=])(?=\\S+$).{8,}$"
+        val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*+=_-])(?=\\S+$).{8,}$"
         return password.matches(PASSWORD_PATTERN.toRegex())
     }
 }
