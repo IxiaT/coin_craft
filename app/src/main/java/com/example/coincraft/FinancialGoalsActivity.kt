@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, GoalsAdapter.UpdateBalanceListener {
 
@@ -19,8 +21,8 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     private lateinit var goalList: MutableList<Goal>
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
-    private var savedBalance: Double = 34661.0
-    private var plannedBalance: Double = 50000.0
+    private var savedBalance: Double = 0.0
+    private var plannedBalance: Double = 0.0
 
     private lateinit var progressIndicator: CircularProgressIndicator
     private lateinit var progressTextView: TextView
@@ -57,12 +59,12 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         goalsRecyclerView = findViewById(R.id.goalsRecyclerView)
         goalsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Sample goal data
+        // Sample goal data with new date format
         goalList = mutableListOf(
-            Goal("Mother's Day", R.drawable.ic_goal_icon, 1000.0, 1000.0),
-            Goal("Boracay", R.drawable.ic_goal_icon, 1500.0, 3000.0),
-            Goal("iPhone 16", R.drawable.ic_goal_icon, 7500.0, 30000.0),
-            Goal("Shoes", R.drawable.ic_goal_icon, 3250.0, 5000.0)
+            Goal("Mother's Day", R.drawable.ic_goal_icon, 1000.0, 1000.0, "2024-12-08"),
+            Goal("Boracay", R.drawable.ic_goal_icon, 1500.0, 3000.0, "2024-12-08"),
+            Goal("iPhone 16", R.drawable.ic_goal_icon, 7500.0, 30000.0, "2024-12-08"),
+            Goal("Shoes", R.drawable.ic_goal_icon, 3250.0, 5000.0, "2024-12-08")
         )
 
         // Set up adapter and pass the listener
@@ -137,4 +139,3 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         progressTextView.text = "$progressPercentage%"
     }
 }
-

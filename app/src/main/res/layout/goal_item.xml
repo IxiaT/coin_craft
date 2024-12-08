@@ -50,6 +50,16 @@
             android:progress="80"
             android:progressBackgroundTint="#808080"
             android:progressTint="@color/default_color" />
+
+        <TextView
+            android:id="@+id/goal_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/silkscreen_bold"
+            android:text="Goal Date"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+
     </LinearLayout>
 
     <!-- Remaining Amount -->

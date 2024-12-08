@@ -23,11 +23,6 @@ class GoalsAdapter(
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
         val goal = goals[position]
 
-        // Set the goal data
-        holder.goalIcon.setImageResource(goal.icon)
-        holder.goalName.text = goal.name
-        holder.goalProgress.text = "${goal.saved} / ${goal.target} - ${goal.percentage}%"
-
         // Ensure the remaining balance is displayed as a whole number
         val remaining = if (goal.remaining < 0) 0.0 else goal.remaining // Prevent negative remaining
         holder.goalRemaining.text = String.format("%.0f", remaining) // Display as whole number without decimals
@@ -50,14 +45,23 @@ class GoalsAdapter(
             holder.goalRemaining.setTextColor(ContextCompat.getColor(context, R.color.red)) // or your default color
         }
 
-        // Item click listener
+        // Set the goal data
+        holder.goalIcon.setImageResource(goal.icon)
+        holder.goalName.text = goal.name
+        holder.goalProgress.text = "${goal.saved} / ${goal.target} - ${goal.percentage}%"
+
+        // Display formatted date in RecyclerView (in "MMMM dd, yyyy" format)
+        holder.goalDate.text = goal.getFormattedDateForDisplay() // Using getFormattedDateForDisplay()
+
+        // Item click listener to open the dialog
         holder.itemView.setOnClickListener {
             openDialog(goal, position)
         }
     }
 
+    // Interface to update balance when a goal is updated
     interface UpdateBalanceListener {
-        fun onGoalUpdated() // This will be called when a goal is updated
+        fun onGoalUpdated()
     }
 
     override fun getItemCount(): Int = goals.size
@@ -71,11 +75,15 @@ class GoalsAdapter(
         val btnWithdraw = dialogView.findViewById<Button>(R.id.btn_withdraw)
         val btnDeposit = dialogView.findViewById<Button>(R.id.btn_deposit)
         val btnDelete = dialogView.findViewById<Button>(R.id.btn_delete)
+        val goalDateInput = dialogView.findViewById<EditText>(R.id.goal_date)
 
-        // Set initial balance
+        // Set initial balance in dialog
         tvCurrentBalance.text = "Current Balance: ${goal.saved}"
 
-        // Withdraw button
+        // Set the formatted date for the goal in the dialog (in "MM/dd/yyyy" format)
+        goalDateInput.setText(goal.getFormattedDateForDialog()) // Using getFormattedDateForDialog()
+
+        // Withdraw button logic
         btnWithdraw.setOnClickListener {
             val amount = etAmount.text.toString().toDoubleOrNull()
             if (amount != null && amount > 0 && goal.saved >= amount) {
@@ -91,7 +99,7 @@ class GoalsAdapter(
             }
         }
 
-        // Deposit button
+        // Deposit button logic
         btnDeposit.setOnClickListener {
             val amount = etAmount.text.toString().toDoubleOrNull()
             if (amount != null && amount > 0) {
@@ -107,17 +115,15 @@ class GoalsAdapter(
             }
         }
 
-        // Delete button
+        // Delete button logic
         btnDelete.setOnClickListener {
             // Remove the goal from the list and notify the adapter
             goals.removeAt(position)
-            // Notify RecyclerView that an item has been removed
             notifyItemRemoved(position)
             dialog.dismiss()
             updateBalanceListener.onGoalUpdated()
 
-            // Optionally, if you want to refresh the entire list
-            notifyDataSetChanged() // Uncomment this if needed
+            notifyDataSetChanged()
         }
 
         dialog.show()
@@ -127,8 +133,8 @@ class GoalsAdapter(
         val goalIcon: ImageView = itemView.findViewById(R.id.goal_icon)
         val goalName: TextView = itemView.findViewById(R.id.goal_name)
         val goalProgress: TextView = itemView.findViewById(R.id.goal_progress)
-        val goalRemaining: TextView = itemView.findViewById(R.id.goal_remaining)
+        val goalDate: TextView = itemView.findViewById(R.id.goal_date)
         val goalProgressBar: ProgressBar = itemView.findViewById(R.id.goal_progress_bar)
+        val goalRemaining: TextView = itemView.findViewById(R.id.goal_remaining)
     }
 }
-

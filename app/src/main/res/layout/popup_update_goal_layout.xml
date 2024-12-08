@@ -23,6 +23,15 @@
         android:inputType="numberDecimal"
         android:padding="10dp" />
 
+    <!-- Goal Date Input -->
+    <EditText
+        android:id="@+id/goal_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Goal Date"
+        android:inputType="date"
+        android:padding="10dp" />
+
     <!-- Withdraw and Deposit Buttons -->
     <LinearLayout
         android:layout_width="match_parent"

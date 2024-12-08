@@ -33,9 +33,12 @@ class AddGoalDialogFragment : DialogFragment() {
 
         // Configure the date input field
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
         goalDateInput.inputType = InputType.TYPE_NULL
+
+        // Set initial date in goalDateInput using current date (formatted as MM/dd/yyyy)
+        goalDateInput.setText(SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.time))
+
+        // Set up the date picker dialog
         goalDateInput.setOnClickListener {
             val datePicker = DatePickerDialog(
                 requireContext(),
@@ -43,7 +46,8 @@ class AddGoalDialogFragment : DialogFragment() {
                     val selectedDate = Calendar.getInstance().apply {
                         set(year, month, dayOfMonth)
                     }
-                    goalDateInput.setText(dateFormat.format(selectedDate.time)) // Set the formatted date
+                    // Format the selected date as MM/dd/yyyy for the dialog
+                    goalDateInput.setText(SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(selectedDate.time))
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -65,13 +69,18 @@ class AddGoalDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // Pass the data back to the activity
+            // Pass the data back to the activity, including the goal date in yyyy-MM-dd format
+            val formattedDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).parse(deadline)?.let {
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it)
+            } ?: SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
             goalSaveListener?.onGoalSaved(
                 Goal(
                     name = goalName,
                     icon = R.drawable.ic_goal_icon, // Example icon
                     saved = 0.0, // Initially no savings
-                    target = goalAmount.toDouble()
+                    target = goalAmount.toDouble(),
+                    date = formattedDate // Pass the date in yyyy-MM-dd format
                 )
             )
             dismiss() // Dismiss the dialog when done
