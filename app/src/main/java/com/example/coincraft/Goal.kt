@@ -3,12 +3,12 @@ package com.example.coincraft
 data class Goal(
     val name: String,
     val icon: Int,
-    val saved: Double,
+    var saved: Double,
     val target: Double
 ) {
-    val percentage: Int
+    var percentage: Int = 0
         get() = ((saved / target) * 100).toInt()
 
-    val remaining: Double
+    var remaining: Double = 0.0
         get() = target - saved
 }
