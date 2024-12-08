@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "537247527954",
+    "firebase_url": "https://fp-mobdev-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fp-mobdev",
+    "storage_bucket": "fp-mobdev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537247527954:android:df08ca4c4b0e3ac2ac14cb",
+        "android_client_info": {
+          "package_name": "com.example.coincraft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6sC3Emc4J1zmofnVpw9zlNi9_z6I4Pnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537247527954:android:bfc650d89b6c9d7bac14cb",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6sC3Emc4J1zmofnVpw9zlNi9_z6I4Pnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537247527954:android:1644bc2672ed9bc6ac14cb",
+        "android_client_info": {
+          "package_name": "com.example.fpmobdev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6sC3Emc4J1zmofnVpw9zlNi9_z6I4Pnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
