@@ -6,12 +6,13 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class FinancialGoalsActivity : AppCompatActivity() {
+class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener {
 
     private lateinit var goalsRecyclerView: RecyclerView
     private lateinit var goalsAdapter: GoalsAdapter
@@ -32,12 +33,11 @@ class FinancialGoalsActivity : AppCompatActivity() {
         addGoalBtn.setOnClickListener {
             // Show the Add Goal Dialog
             val dialogFragment = AddGoalDialogFragment()
+            dialogFragment.setGoalSaveListener(this) // Set this activity as the listener
             dialogFragment.show(supportFragmentManager, "AddGoalDialog")
         }
 
         // Initialize views
-        val progressIndicator = findViewById<CircularProgressIndicator>(R.id.financialGoalProgress)
-        val progressText = findViewById<TextView>(R.id.progressPercentage)
         savedBalanceEdit = findViewById(R.id.saved_balance_edit)
         plannedBalanceEdit = findViewById(R.id.planned_balance_edit)
 
@@ -47,9 +47,6 @@ class FinancialGoalsActivity : AppCompatActivity() {
 
         // Setup balance listeners
         setupBalanceListeners()
-
-        // Calculate and display initial progress
-        updateProgress()
 
         // Setup RecyclerView for goals
         goalsRecyclerView = findViewById(R.id.goalsRecyclerView)
@@ -68,25 +65,26 @@ class FinancialGoalsActivity : AppCompatActivity() {
         goalsRecyclerView.adapter = goalsAdapter
     }
 
+    override fun onGoalSaved(newGoal: Goal) {
+        // Add the new goal to the list and update the adapter
+        goalList.add(newGoal)
+        goalsAdapter.notifyItemInserted(goalList.size - 1)
+        Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
+    }
+
     private fun setupBalanceListeners() {
-        // Listener for Saved Balance
         savedBalanceEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
                 savedBalance = s?.toString()?.toDoubleOrNull() ?: 0.0
                 updateProgress()
             }
         })
 
-        // Listener for Planned Balance
         plannedBalanceEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
                 plannedBalance = s?.toString()?.toDoubleOrNull() ?: 0.0
                 updateProgress()
@@ -95,26 +93,14 @@ class FinancialGoalsActivity : AppCompatActivity() {
     }
 
     private fun updateProgress() {
-        // Calculate progress percentage
         val progressPercentage = if (plannedBalance != 0.0) {
             ((savedBalance / plannedBalance) * 100).toInt()
         } else {
             0
         }
-
-        // Update progress text
         val progressTextView = findViewById<TextView>(R.id.progressPercentage)
         progressTextView.text = "$progressPercentage%"
-
-        // Update progress indicator
         val progressIndicator = findViewById<CircularProgressIndicator>(R.id.financialGoalProgress)
         progressIndicator.progress = progressPercentage
-
-        // Change color of the progress bar to green if 100%
-        if (progressPercentage >= 100) {
-            progressIndicator.setIndicatorColor(getColor(R.color.green)) // Ensure you have a green color in your resources
-        } else {
-            progressIndicator.setIndicatorColor(getColor(R.color.default_color)) // Reset to default color
-        }
     }
 }

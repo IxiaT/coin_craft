@@ -69,17 +69,19 @@
         android:textColor="#000000"
         android:layout_marginBottom="8dp" />
 
-    <Button
+    <EditText
         android:id="@+id/goal_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="DATE"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
-        android:text="DATE"
         android:fontFamily="@font/silkscreen_regular"
-        android:drawableStart="@drawable/ic_calender"
+        android:inputType="text"
+        android:drawableEnd="@drawable/ic_calendar"
         android:backgroundTint="#FFD700"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:layout_marginBottom="16dp" />
 
     <ImageButton
         android:id="@+id/add_goal_button"
