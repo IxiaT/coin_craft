@@ -347,7 +347,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/silkscreen"
-                        android:text="Finacial Goal"
+                        android:text="Finacial Goals"
                         android:textSize="20sp" />
 
                     <androidx.recyclerview.widget.RecyclerView

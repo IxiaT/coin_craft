@@ -117,7 +117,7 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         if (progressPercentage >= 100) {
             progressIndicator.setIndicatorColor(ContextCompat.getColor(this, R.color.green))
         } else {
-            progressIndicator.setIndicatorColor(ContextCompat.getColor(this, R.color.default_color))
+            progressIndicator.setIndicatorColor(ContextCompat.getColor(this, R.color.yellow))
         }
 
         progressTextView.text = "$progressPercentage%"

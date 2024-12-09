@@ -49,7 +49,7 @@
             android:max="100"
             android:progress="80"
             android:progressBackgroundTint="#808080"
-            android:progressTint="@color/default_color" />
+            android:progressTint="@color/yellow" />
 
         <TextView
             android:id="@+id/goal_date"

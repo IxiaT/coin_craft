@@ -31,7 +31,7 @@ class GoalsAdapter(
         holder.goalProgressBar.progress = goal.percentage
 
         // Set color of the progress bar
-        val progressColor = if (goal.percentage >= 100) R.color.green else R.color.default_color
+        val progressColor = if (goal.percentage >= 100) R.color.green else R.color.yellow
         holder.goalProgressBar.progressDrawable.setColorFilter(
             ContextCompat.getColor(context, progressColor),
             android.graphics.PorterDuff.Mode.SRC_IN
