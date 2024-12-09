@@ -8,11 +8,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import java.text.SimpleDateFormat
-import java.util.*
 
 class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, GoalsAdapter.UpdateBalanceListener {
 
@@ -31,62 +30,50 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_financial_goals)
 
-        // Find the Add Goal Button
-        val addGoalBtn: ImageButton = findViewById(R.id.addgoalbtn)
-
-        // Set the click listener for the button
-        addGoalBtn.setOnClickListener {
-            // Show the Add Goal Dialog
-            val dialogFragment = AddGoalDialogFragment()
-            dialogFragment.setGoalSaveListener(this) // Set this activity as the listener
-            dialogFragment.show(supportFragmentManager, "AddGoalDialog")
-        }
-
         // Initialize views
+        val addGoalBtn: ImageButton = findViewById(R.id.addgoalbtn)
         savedBalanceEdit = findViewById(R.id.saved_balance_edit)
         plannedBalanceEdit = findViewById(R.id.planned_balance_edit)
         progressIndicator = findViewById(R.id.financialGoalProgress)
         progressTextView = findViewById(R.id.progressPercentage)
 
-        // Set initial balance values
-        savedBalanceEdit.setText(savedBalance.toString())
-        plannedBalanceEdit.setText(plannedBalance.toString())
+        // Set the click listener for the Add Goal button
+        addGoalBtn.setOnClickListener {
+            val dialogFragment = AddGoalDialogFragment()
+            dialogFragment.setGoalSaveListener(this)
+            dialogFragment.show(supportFragmentManager, "AddGoalDialog")
+        }
 
-        // Setup balance listeners
-        setupBalanceListeners()
-
-        // Setup RecyclerView for goals
+        // Setup RecyclerView
         goalsRecyclerView = findViewById(R.id.goalsRecyclerView)
         goalsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Sample goal data with new date format
+        // Initialize goal data
         goalList = mutableListOf(
-            Goal("Mother's Day", R.drawable.ic_goal_icon, 1000.0, 1000.0, "2024-12-08"),
-            Goal("Boracay", R.drawable.ic_goal_icon, 1500.0, 3000.0, "2024-12-08"),
-            Goal("iPhone 16", R.drawable.ic_goal_icon, 7500.0, 30000.0, "2024-12-08"),
-            Goal("Shoes", R.drawable.ic_goal_icon, 3250.0, 5000.0, "2024-12-08")
+            Goal("Mother's Day", R.drawable.ic_holiday, 1000.0, 1000.0, "2024-12-08"),
+            Goal("Boracay", R.drawable.ic_destination, 1500.0, 3000.0, "2024-12-08"),
+            Goal("iPhone 16", R.drawable.ic_gadget, 7500.0, 30000.0, "2024-12-08"),
+            Goal("Shoes", R.drawable.ic_shoes, 3250.0, 5000.0, "2024-12-08")
         )
 
-        // Set up adapter and pass the listener
-        goalsAdapter = GoalsAdapter(this, goalList, this)
+        // Set up adapter with FragmentManager and listener
+        goalsAdapter = GoalsAdapter(this, goalList, supportFragmentManager, this)
         goalsRecyclerView.adapter = goalsAdapter
 
-        // Update the main balance and progress initially
+        // Initialize balance values and listeners
+        setupBalanceListeners()
         updateOverallBalance()
     }
 
     override fun onGoalSaved(newGoal: Goal) {
-        // Add the new goal to the list and update the adapter
         goalList.add(newGoal)
         goalsAdapter.notifyItemInserted(goalList.size - 1)
         Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
-
-        // Update the overall balance and progress after adding the goal
         updateOverallBalance()
     }
 
     override fun onGoalUpdated() {
-        // Whenever a goal is updated, refresh the overall balance and progress
+        // Called when a goal is updated in the adapter
         updateOverallBalance()
     }
 
@@ -110,21 +97,14 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         })
     }
 
-    // Method to update the overall saved and planned balances by summing up all goals
     private fun updateOverallBalance() {
-        // Calculate overall saved and planned balances
         savedBalance = goalList.sumOf { it.saved }
         plannedBalance = goalList.sumOf { it.target }
-
-        // Update the UI for the overall saved and planned balances
         savedBalanceEdit.setText(savedBalance.toString())
         plannedBalanceEdit.setText(plannedBalance.toString())
-
-        // Update the progress bar and percentage text
         updateProgress()
     }
 
-    // Method to update progress bar for the main balance
     private fun updateProgress() {
         val progressPercentage = if (plannedBalance != 0.0) {
             ((savedBalance / plannedBalance) * 100).toInt()
@@ -132,10 +112,14 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
             0
         }
 
-        // Update the progress bar with the calculated progress
         progressIndicator.progress = progressPercentage
 
-        // Update the progress text to display the percentage
+        if (progressPercentage >= 100) {
+            progressIndicator.setIndicatorColor(ContextCompat.getColor(this, R.color.green))
+        } else {
+            progressIndicator.setIndicatorColor(ContextCompat.getColor(this, R.color.default_color))
+        }
+
         progressTextView.text = "$progressPercentage%"
     }
 }

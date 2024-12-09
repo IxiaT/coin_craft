@@ -8,7 +8,7 @@ data class Goal(
     val icon: Int,
     var saved: Double,
     val target: Double,
-    val date: String // Store date in yyyy-MM-dd format for consistency
+    var date: String // Store date in yyyy-MM-dd format for consistency
 ) {
     var remaining: Double = 0.0
         get() = target - saved

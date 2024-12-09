@@ -26,10 +26,21 @@ class AddGoalDialogFragment : DialogFragment() {
         val addGoalButton: ImageButton = view.findViewById(R.id.add_goal_button)
 
         // Set up the goal type dropdown (Spinner)
-        val goalTypes = arrayOf("Investment", "Holiday", "Gadget", "Destination", "Other")
+        val goalTypes = arrayOf("Investment", "Holiday", "Gadget", "Destination", "Shoes", "Clothes", "Other")
         val adapter = ArrayAdapter(requireContext(), R.layout.new_goal_spinner, goalTypes)
         adapter.setDropDownViewResource(R.layout.new_goal_spinner)
         goalTypeSpinner.adapter = adapter
+
+        // Map goal types to corresponding drawable resources
+        val goalTypeToDrawableMap = mapOf(
+            "Investment" to R.drawable.ic_investment,
+            "Holiday" to R.drawable.ic_holiday,
+            "Gadget" to R.drawable.ic_gadget,
+            "Destination" to R.drawable.ic_destination,
+            "Shoes" to R.drawable.ic_shoes,
+            "Clothes" to R.drawable.ic_clothes,
+            "Other" to R.drawable.ic_others
+        )
 
         // Configure the date input field
         val calendar = Calendar.getInstance()
@@ -69,6 +80,9 @@ class AddGoalDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
+            // Map the selected goal type to its drawable resource
+            val goalIcon = goalTypeToDrawableMap[goalType] ?: R.drawable.ic_others // Default to "Other" if not found
+
             // Pass the data back to the activity, including the goal date in yyyy-MM-dd format
             val formattedDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).parse(deadline)?.let {
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it)
@@ -77,7 +91,7 @@ class AddGoalDialogFragment : DialogFragment() {
             goalSaveListener?.onGoalSaved(
                 Goal(
                     name = goalName,
-                    icon = R.drawable.ic_goal_icon, // Example icon
+                    icon = goalIcon, // Pass the drawable resource ID
                     saved = 0.0, // Initially no savings
                     target = goalAmount.toDouble(),
                     date = formattedDate // Pass the date in yyyy-MM-dd format

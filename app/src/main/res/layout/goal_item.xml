@@ -11,7 +11,7 @@
         android:id="@+id/goal_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_goal_icon" />
+        android:src="@drawable/ic_holiday" />
 
     <!-- Text and Progress -->
     <LinearLayout
