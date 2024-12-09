@@ -10,4 +10,12 @@
     <string name="budgeting">Budgeting</string>
     <string name="transaction">Transaction</string>
     <string name="expense_tracker">Expense Tracker</string>
+    <string name="category">Category</string>
+    <string name="total_spent">Total Spent:</string>
+    <string name="total_earned">Total Earned:</string>
+    <string name="progress">Progress</string>
+    <string name="description">Description</string>
+    <string name="goal">Goal</string>
+    <string name="item">item</string>
+    <string name="finacial_goal">Finacial Goal</string>
 </resources>

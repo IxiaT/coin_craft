@@ -13,8 +13,8 @@ class Database {
         Log.d(TAG,"Database reference initialized: $databaseReference")
     }
 
-    fun saveUser() {
-//        val userRef = databaseReference.child(userId).child("User")
+    fun getUserRef(userId: String): DatabaseReference{
+        return databaseReference.child(userId)
     }
 
 }

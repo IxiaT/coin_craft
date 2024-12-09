@@ -244,6 +244,7 @@
                         android:textSize="20sp" />
 
                     <LinearLayout
+                        android:id="@+id/income"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -253,7 +254,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/silkscreen"
-                            android:text="Total Earned:"
+                            android:text="@string/total_earned"
                             android:textSize="15sp" />
 
                         <ImageView
@@ -285,6 +286,7 @@
                         android:progressDrawable="@drawable/earned_bar" />
 
                     <LinearLayout
+                        android:id="@+id/spent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -294,7 +296,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/silkscreen"
-                            android:text="Total Spent:"
+                            android:text="@string/total_spent"
                             android:textSize="15sp" />
 
                         <ImageView
@@ -331,31 +333,61 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginVertical="10dp"
                 app:cardElevation="20dp"
                 app:cardCornerRadius="20dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:fontFamily="@font/silkscreen"
+                    android:text="@string/finacial_goal"
+                    android:textSize="20sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/silkscreen"
-                        android:text="Finacial Goal"
-                        android:textSize="20sp" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="20dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/horizontal_finacial_goal_rv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
 
+
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/empty_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    tools:visibility="invisible">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/dinosaur" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/silkscreen"
+                        android:text="No Goals" />
+
+                </LinearLayout>
+
+
+
 
             </androidx.cardview.widget.CardView>
 
