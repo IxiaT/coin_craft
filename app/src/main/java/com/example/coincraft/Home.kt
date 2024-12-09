@@ -121,8 +121,8 @@ class Home : AppCompatActivity() {
         }
 
         finacialCard.setOnClickListener{
-//            val fin = Intent(this@Home, )
-//            startActivity(fin)
+            val financialg = Intent(this@Home, FinancialGoalsActivity::class.java)
+            startActivity(financialg)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

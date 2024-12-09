@@ -1,5 +1,6 @@
 package com.example.coincraft
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +21,8 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     private lateinit var goalList: MutableList<Goal>
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
+    private lateinit var backBtn: ImageButton
+    private lateinit var financialViewModel: FinancialViewModel
     private var savedBalance: Double = 0.0
     private var plannedBalance: Double = 0.0
 
@@ -36,6 +39,12 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         plannedBalanceEdit = findViewById(R.id.planned_balance_edit)
         progressIndicator = findViewById(R.id.financialGoalProgress)
         progressTextView = findViewById(R.id.progressPercentage)
+        backBtn = findViewById(R.id.backbtn)
+
+        backBtn.setOnClickListener {
+            val homeAct = Intent(this, Home::class.java)
+            startActivity(homeAct)
+        }
 
         // Set the click listener for the Add Goal button
         addGoalBtn.setOnClickListener {
