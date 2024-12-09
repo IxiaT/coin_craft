@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Background color (transparent in this case) -->
+    <solid android:color="@android:color/transparent" />
+
+    <!-- Rounded corners -->
+    <corners android:radius="10dp" />
+
+    <!-- Border -->
+    <stroke
+        android:width="2dp"
+        android:color="#D1B000" /> <!-- Golden color -->
+</shape>

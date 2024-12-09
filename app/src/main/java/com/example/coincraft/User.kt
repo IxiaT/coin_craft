@@ -5,9 +5,9 @@ class User (
     var username: String = "",
     var password: String = "",
     var hp: Int = 100,
-    var xp: Int = 100
+    var xp: Int = 0
 ) {
-    constructor() : this("", "", "", 100, 100)
+    constructor() : this("", "", "", 100, 0)
 
     fun retrieveEmail(): String {
         return email

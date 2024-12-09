@@ -20,6 +20,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var retryPassword: EditText
     private lateinit var registerButton: ImageView
+    private lateinit var database: Database
+    private val repository = UserRepository()
 
     private val TAG = "RegisterActivity"
 
@@ -27,8 +29,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-
         firebaseAuth = FirebaseAuth.getInstance()
+        database = Database()
 
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
@@ -74,11 +76,53 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(TAG, "User created successfully with email: $mail")
                 val userId = firebaseAuth.currentUser?.uid
 
-                userId?.let {
-                    Toast.makeText(this@RegisterActivity, "Register Successfully", Toast.LENGTH_SHORT).show()
-                    val registerIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                    startActivity(registerIntent)
-                    finish()
+                userId?.let { uid ->
+                    val newUser = User(
+                        email = mail,
+                        username = user,
+                        password = passP,
+                        hp = 100,
+                        xp = 0
+                    )
+
+//                    repository.saveUser(uid, newUser, object : Database.OnDatabaseActionCompleteListener {
+//                        override fun onSuccess() {
+//                            Log.d(TAG, "User data saved successfully to Firebase Database")
+//                            Toast.makeText(this@RegisterActivity, "Register Successfully", Toast.LENGTH_SHORT).show()
+//                            val registerIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
+//                            startActivity(registerIntent)
+//                            finish()
+//                        }
+//
+//                        override fun onFailure(e: Exception) {
+//                            Log.e(TAG, "Failed to save user data: ", e)
+//                            Toast.makeText(this@RegisterActivity, "Failed to save user data", Toast.LENGTH_SHORT).show()
+//                        }
+//                    })
+
+                    repository.saveUser(uid, newUser) { success, error ->
+                        if (success) {
+                            Log.d(TAG, "User data saved successfully to Firebase Database")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Register Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            // Navigate to LoginActivity
+                            val registerIntent =
+                                Intent(this@RegisterActivity, LoginActivity::class.java)
+                            startActivity(registerIntent)
+                            finish()
+                        } else {
+                            Log.e(TAG, "Failed to save user data: $error")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Failed to save user data",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             } else {
                 Log.e(TAG, "Register failed: ", task.exception)
