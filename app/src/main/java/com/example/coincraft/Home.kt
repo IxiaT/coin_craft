@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +47,7 @@ class Home : AppCompatActivity() {
         val plusBtn = findViewById<FloatingActionButton>(R.id.plus_button)
         val bottomNav = findViewById<BottomNavigationView>(R.id.botnav)
         val spentBtn = findViewById<LinearLayout>(R.id.spent)
+        val finacialCard = findViewById<CardView>(R.id.finacial_card)
 
         //Recycler view
 
@@ -116,6 +118,11 @@ class Home : AppCompatActivity() {
 
         if (xp != null) {
             xpBar.setProgress(xp, true)
+        }
+
+        finacialCard.setOnClickListener{
+//            val fin = Intent(this@Home, )
+//            startActivity(fin)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

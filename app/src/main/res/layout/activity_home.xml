@@ -332,6 +332,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/finacial_card"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginVertical="10dp"
