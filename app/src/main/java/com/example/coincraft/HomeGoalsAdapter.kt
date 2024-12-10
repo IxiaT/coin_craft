@@ -24,11 +24,20 @@ class HomeGoalsAdapter (
 
     override fun onBindViewHolder(holder: HomeGoalsViewHolder, position: Int) {
         val model = financialGoals[position]
-        holder.goalType.text = model.goalType
-        holder.goalName.text = model.goalName
-        holder.goalDeadline.text = model.date
-        holder.goalProgress.text = "${model.currentProgress}/${model.amount}"
+
+        // Set the goal type, name, and other properties from the FinancialModel
+        holder.goalType.text = model.name  // Assuming `goalType` is related to the `name`
+        holder.goalName.text = model.name  // Goal name (model name)
+
+        // Use `getFormattedDateForDisplay()` for formatted date display
+        holder.goalDeadline.text = model.getFormattedDateForDisplay()
+
+        // Update progress information
+        holder.goalProgress.text = "${model.saved} / ${model.target} - ${model.percentage}%"
+
+        // Optionally, update other UI elements based on the FinancialModel properties
     }
+
 
     class HomeGoalsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val goalName = itemView.findViewById<TextView>(R.id.goal_name)

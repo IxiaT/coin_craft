@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -48,6 +49,7 @@ class Home : AppCompatActivity() {
     private lateinit var goalsRV: RecyclerView
     private lateinit var plusBtn: FloatingActionButton
     private lateinit var bottomNav: BottomNavigationView
+    private lateinit var stngsBox: ImageButton
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +74,7 @@ class Home : AppCompatActivity() {
         finacialCard = findViewById(R.id.finacial_card)
         emptyImage = findViewById(R.id.empty_list_icon)
         emptyTextView = findViewById(R.id.empty_list_text)
+        stngsBox = findViewById(R.id.settings_btn)
 
         //Initialize ViewModels
         expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
@@ -110,7 +113,6 @@ class Home : AppCompatActivity() {
         stngsBox.setOnClickListener {
             showLogoutDialog()
         }
-
 
         // Change intent to your respective activities
         bottomNav.setOnNavigationItemSelectedListener { item ->
