@@ -35,6 +35,9 @@
         <activity android:name=".ExpenseTracker"
             android:exported="false" />
 
+        <activity android:name=".FinancialGoalsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_marginBottom="10dp">
+
+    <!-- Icon -->
+    <ImageView
+        android:id="@+id/goal_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_holiday" />
+
+    <!-- Text and Progress -->
+    <LinearLayout
+        android:layout_width="217dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/goal_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/silkscreen_bold"
+            android:text="Goal Name"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/goal_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/silkscreen_regular"
+            android:text="800.00 / 1000.00 - 80%"
+            android:textColor="#808080"
+            android:textSize="14sp" />
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/goal_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="10dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="80"
+            android:progressBackgroundTint="#808080"
+            android:progressTint="@color/yellow" />
+
+        <TextView
+            android:id="@+id/goal_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/silkscreen_bold"
+            android:text="Goal Date"
+            android:textSize="14sp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <!-- Remaining Amount -->
+    <TextView
+        android:id="@+id/goal_remaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/silkscreen_regular"
+        android:text="200.00"
+        android:textColor="#FF0000"
+        android:textSize="14sp" />
+</LinearLayout>
