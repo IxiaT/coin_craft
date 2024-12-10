@@ -5,20 +5,20 @@
         <item>Food</item>
         <item>Transport</item>
         <item>Shopping</item>
+        <item>Online Shopping</item>
         <item>Entertainment</item>
-        <item>Utilities</item>
+        <item>Bills</item>
         <item>Health</item>
-        <item>Other</item>
     </string-array>
 
     <string-array name="income_categories">
         <item>Uncategorize</item>
         <item>Salary</item>
+        <item>Allowance</item>
         <item>Business</item>
         <item>Freelancing</item>
         <item>Investments</item>
         <item>Rental Income</item>
         <item>Gifts</item>
-        <item>Other</item>
     </string-array>
 </resources>

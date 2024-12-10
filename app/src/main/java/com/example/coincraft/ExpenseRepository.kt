@@ -52,4 +52,20 @@ class ExpenseRepository {
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
     }
+
+    fun getTotalExpenses(userId: String, onComplete: (Double, String?) -> Unit) {
+        val expenseRef = databaseReference.child(userId).child("Expenses")
+        expenseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val totalSum = snapshot.children
+                    .mapNotNull { it.getValue(ExpenseModel::class.java) }
+                    .sumOf { it.amount }
+                onComplete(totalSum, null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onComplete(0.0, error.message)
+            }
+        })
+    }
 }
