@@ -1,21 +1,23 @@
 package com.example.coincraft
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAddedListener {
+class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAddedListener, EditDebtDialogFragment.OnDebtEditedListener {
 
-    private lateinit var topDebtsRecyclerView: RecyclerView
-    private lateinit var yourDebtsRecyclerView: RecyclerView
-    private lateinit var topDebtsAdapter: DebtCardAdapterL
-    private lateinit var yourDebtsAdapter: DebtCardAdapterS
-    private lateinit var topDebtsList: ArrayList<DebtCardModelL>
-    private lateinit var yourDebtsList: ArrayList<DebtCardModelS>
+    private lateinit var toReceiveRecyclerView: RecyclerView
+    private lateinit var toPayRecyclerView: RecyclerView
+    private lateinit var toReceiveAdapter: DebtCardAdapterL
+    private lateinit var toPayAdapter: DebtCardAdapterS
+    private lateinit var toReceiveList: ArrayList<DebtCardModel>
+    private lateinit var toPayList: ArrayList<DebtCardModel>
     private lateinit var addDebtButton: ImageButton
+
 
     companion object {
         val DEFAULT_PROFILE_IMAGE = R.drawable.avatar
@@ -28,12 +30,12 @@ class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAdd
 
         // Initialize views
         addDebtButton = findViewById(R.id.newdebtbtn)
-        topDebtsRecyclerView = findViewById(R.id.rview_topdebts)
-        yourDebtsRecyclerView = findViewById(R.id.rview_yourdebts)
+        toReceiveRecyclerView = findViewById(R.id.rview_topdebts)
+        toPayRecyclerView = findViewById(R.id.rview_yourdebts)
 
         // Setup RecyclerViews
-        setupRecyclerView(topDebtsRecyclerView)
-        setupRecyclerView(yourDebtsRecyclerView)
+        setupRecyclerView(toReceiveRecyclerView)
+        setupRecyclerView(toPayRecyclerView)
 
         // Handle "Add Debt" button click
         addDebtButton.setOnClickListener {
@@ -42,76 +44,85 @@ class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAdd
         }
 
         // Populate initial data
-        topDebtsList = generateTopDebts()
-        yourDebtsList = generateYourDebts()
+        toReceiveList = generateToReceiveDebts()
+        toPayList = generateToPayDebts()
 
-        // Bind data to adapters
-        topDebtsAdapter = DebtCardAdapterL(this, topDebtsList)
-        yourDebtsAdapter = DebtCardAdapterS(this, yourDebtsList)
+        // Bind data to adapters with onItemClicked implementation
+        toReceiveAdapter = DebtCardAdapterL(this, toReceiveList) { selectedCard, position ->
+            openEditDebtDialog(selectedCard.name, selectedCard.amount, selectedCard.date, selectedCard.state, position, "toReceive")
+        }
 
-        topDebtsRecyclerView.adapter = topDebtsAdapter
-        yourDebtsRecyclerView.adapter = yourDebtsAdapter
+        toPayAdapter = DebtCardAdapterS(this, toPayList) { selectedCard, position ->
+            openEditDebtDialog(selectedCard.name, selectedCard.amount, selectedCard.date, selectedCard.state, position, "toPay")
+        }
+
+        toReceiveRecyclerView.adapter = toReceiveAdapter
+        toPayRecyclerView.adapter = toPayAdapter
     }
 
-    // Set up RecyclerView layout to always be horizontal
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    // Generate sample data for "Top Debts"
-    private fun generateTopDebts(): ArrayList<DebtCardModelL> {
+    private fun generateToReceiveDebts(): ArrayList<DebtCardModel> {
         return arrayListOf(
-            DebtCardModelL(
-                profileImage = DEFAULT_PROFILE_IMAGE,
-                name = "Gandalf The Great",
-                date = "November 30, 2034",
-                coinImage = DEFAULT_COIN_IMAGE,
-                amount = "500.00",
-                state = "to receive"
-            ),
-            DebtCardModelL(
-                profileImage = DEFAULT_PROFILE_IMAGE,
-                name = "Frodo Baggins",
-                date = "December 8, 2034",
-                coinImage = DEFAULT_COIN_IMAGE,
-                amount = "1500.00",
-                state = "to pay"
-            )
+            DebtCardModel(DEFAULT_PROFILE_IMAGE, "Gandalf The Great", "November 30, 2034", DEFAULT_COIN_IMAGE, "500.00", "to receive")
         )
     }
 
-    // Generate sample data for "Your Debts"
-    private fun generateYourDebts(): ArrayList<DebtCardModelS> {
-        val debtEntries = arrayListOf<DebtCardModelS>()
-        for (i in 1..6) {
-            debtEntries.add(
-                DebtCardModelS(
-                    profileImage = DEFAULT_PROFILE_IMAGE,
-                    name = "Legolas",
-                    date = "12/24/24",
-                    coinImage = DEFAULT_COIN_IMAGE,
-                    amount = "50.00",
-                    state = "to pay"
-                )
-            )
-        }
-        return debtEntries
+    private fun generateToPayDebts(): ArrayList<DebtCardModel> {
+        return arrayListOf(
+            DebtCardModel(DEFAULT_PROFILE_IMAGE, "Frodo Baggins", "December 8, 2034", DEFAULT_COIN_IMAGE, "1500.00", "to pay")
+        )
     }
 
-    // Add new debt data dynamically
     override fun onDebtAdded(amount: String, name: String, date: String, state: String) {
-        yourDebtsList.add(
-            DebtCardModelS(
-                profileImage = DEFAULT_PROFILE_IMAGE,
-                name = name,
-                date = date,
-                coinImage = DEFAULT_COIN_IMAGE,
-                amount = amount,
-                state = state
-            )
-        )
-        yourDebtsAdapter.notifyDataSetChanged()
+        val newDebt = DebtCardModel(DEFAULT_PROFILE_IMAGE, name, date, DEFAULT_COIN_IMAGE, amount, state)
+        if (state == "to receive") {
+            toReceiveList.add(newDebt)
+            toReceiveAdapter.notifyDataSetChanged()
+        } else {
+            toPayList.add(newDebt)
+            toPayAdapter.notifyDataSetChanged()
+        }
+
     }
+
+    private fun openEditDebtDialog(debtOwner: String, currentAmount: String, debtDate: String, debtStatus: String, position: Int, adapterType: String) {
+        val dialogFragment = EditDebtDialogFragment()
+        val bundle = Bundle().apply {
+            putString("debtOwner", debtOwner)
+            putString("currentAmount", currentAmount)
+            putString("debtStatus", debtStatus)
+            putString("debtDate", debtDate)
+            putInt("debtPosition", position)
+            putString("adapterType", adapterType)
+        }
+        dialogFragment.arguments = bundle
+        dialogFragment.show(supportFragmentManager, "editDebtDialog")
+    }
+
+    override fun onDebtEdited(newAmount: String, newDate: String, position: Int, adapterType: String) {
+        val list = if (adapterType == "toPay") toPayList else toReceiveList
+        val adapter = if (adapterType == "toPay") toPayAdapter else toReceiveAdapter
+
+        if (position in list.indices) {
+            val debt = list[position]
+            if (newAmount == "0" || newAmount.toDoubleOrNull() == 0.0) {
+                list.removeAt(position)
+                adapter.notifyItemRemoved(position)
+                Toast.makeText(this, "Debt removed successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                debt.amount = newAmount
+                if (newDate.isNotBlank()) {
+                    debt.date = newDate
+                }
+                adapter.notifyItemChanged(position)
+            }
+        }
+    }
+
 
 
 }
+

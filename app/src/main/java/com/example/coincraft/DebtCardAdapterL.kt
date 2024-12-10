@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class DebtCardAdapterL(
     private val context: Context,
-    private val cardList: List<DebtCardModelL>
+    private var cardList: List<DebtCardModel>,
+    private val onItemClicked: (DebtCardModel, Int) -> Unit
 ) : RecyclerView.Adapter<DebtCardAdapterL.CardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -35,13 +36,15 @@ class DebtCardAdapterL(
         }
         holder.txtAmount.setTextColor(color)
 
+        // Handle item click
+        holder.itemView.setOnClickListener {
+            onItemClicked(card, position)
+        }
+
         holder.btnPlus.setOnClickListener {
             // Add your functionality for the plus button
         }
 
-        holder.btnMinus.setOnClickListener {
-            // Add your functionality for the minus button
-        }
     }
 
     override fun getItemCount(): Int {
@@ -55,6 +58,10 @@ class DebtCardAdapterL(
         val coinImg: ImageView = itemView.findViewById(R.id.coinimg)
         val txtAmount: TextView = itemView.findViewById(R.id.txtamount)
         val btnPlus: ImageButton = itemView.findViewById(R.id.btnplus)
-        val btnMinus: ImageButton = itemView.findViewById(R.id.btnminus)
+    }
+
+    fun updateData(newCardList: List<DebtCardModel>) {
+        cardList = newCardList
+        notifyDataSetChanged()  // Notify that the data set has changed
     }
 }

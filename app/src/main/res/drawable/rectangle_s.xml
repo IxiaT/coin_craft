@@ -24,7 +24,7 @@
           android:pathData="M30,3.5L240,3.5A26.5,26.5 0,0 1,266.5 30L266.5,485A26.5,26.5 0,0 1,240 511.5L30,511.5A26.5,26.5 0,0 1,3.5 485L3.5,30A26.5,26.5 0,0 1,30 3.5z"
           android:strokeWidth="7"
           android:fillColor="#00000000"
-          android:strokeColor="#FFD700"/>
+          android:strokeColor="#F24E1E"/>
     </vector>
   </item>
 

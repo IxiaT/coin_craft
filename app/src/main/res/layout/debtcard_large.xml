@@ -77,18 +77,11 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/btnminus"
-                android:layout_width="75dp"
-                android:layout_height="30dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/minusbtn" />
-
-            <ImageButton
                 android:id="@+id/btnplus"
                 android:layout_width="75dp"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
-                app:srcCompat="@drawable/plusbtn" />
+                app:srcCompat="@drawable/selectbtn" />
         </LinearLayout>
     </LinearLayout>
 

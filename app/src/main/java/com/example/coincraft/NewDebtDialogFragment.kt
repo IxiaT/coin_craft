@@ -66,31 +66,39 @@ class NewDebtDialogFragment : DialogFragment() {
         }
 
         addButton.setOnClickListener {
-            val amount = amountEditText.text.toString()
+            val amountText = amountEditText.text.toString()
             val name = nameEditText.text.toString()
             val date = dateEditText.text.toString()
 
-            // Validate if the amount is a positive number
-            if (amount.isBlank()) {
+            if (amountText.isBlank()) {
                 amountEditText.error = "Amount is required"
-            } else if (!isPositiveNumber(amount)) {
+            } else if (!isPositiveNumber(amountText)) {
                 amountEditText.error = "Amount must be a positive number"
-            } else if (name.isBlank()) {
-                nameEditText.error = "Name is required"
-            } else if (date.isBlank()) {
-                dateEditText.error = "Date is required"
             } else {
-                // Check which button is selected
-                val state = when {
-                    isToPayActive -> "to pay"
-                    isToReceiveActive -> "to receive"
-                    else -> null // No state selected
+                val amount = amountText.toDoubleOrNull() // Convert to Double
+                if (amount == null) {
+                    amountEditText.error = "Invalid number format"
+                    return@setOnClickListener
                 }
-
-                if (state != null) {
-                    // Send the data back to the listener
-                    (activity as? OnDebtAddedListener)?.onDebtAdded(amount, name, date, state)
-                    dismiss() // Close the dialog
+                if (name.isBlank()) {
+                    nameEditText.error = "Name is required"
+                } else if (date.isBlank()) {
+                    dateEditText.error = "Date is required"
+                } else {
+                    val state = when {
+                        isToPayActive -> "to pay"
+                        isToReceiveActive -> "to receive"
+                        else -> null
+                    }
+                    if (state != null) {
+                        (activity as? OnDebtAddedListener)?.onDebtAdded(
+                            amount.toString(), // Send as a String or Double based on your requirement
+                            name,
+                            date,
+                            state
+                        )
+                        dismiss() // Close the dialog
+                    }
                 }
             }
         }

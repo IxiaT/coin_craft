@@ -35,7 +35,7 @@
                 <path
                     android:pathData="M30 0H395C411.569 0 425 13.4315 425 30V512C425 528.569 411.569 542 395 542H30C13.4315 542 0 528.569 0 512V30C0 13.4315 13.4315 0 30 0Z"
                     android:strokeWidth="10"
-                    android:strokeColor="#F24E1E"
+                    android:strokeColor="#0ACF83"
                     />
             </group>
         </vector>

@@ -1,10 +1,10 @@
 package com.example.coincraft
 
-data class DebtCardModelL(
-    var profileImage: Int,
+data class DebtCardModel(
+    val profileImage: Int,
     var name: String,
     var date: String,
-    var coinImage: Int,
+    val coinImage: Int,
     var amount: String,
     var state: String
 )
