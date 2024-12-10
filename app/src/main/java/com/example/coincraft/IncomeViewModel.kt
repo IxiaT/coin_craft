@@ -24,4 +24,8 @@ class IncomeViewModel : ViewModel() {
     fun deleteIncome(userId: String, incomeId: String, onComplete: (Boolean, String?) -> Unit) {
         repository.deleteIncome(userId, incomeId, onComplete)
     }
+
+    fun getTotalIncome(userId: String, onComplete: (Double, String?) -> Unit) {
+        repository.getTotalIncome(userId, onComplete)
+    }
 }

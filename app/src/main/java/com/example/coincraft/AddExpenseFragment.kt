@@ -63,6 +63,7 @@ class AddExpenseFragment: DialogFragment() {
 
             expenseViewModel = ViewModelProvider(requireActivity())[ExpenseViewModel::class.java]
             incomeViewModel = ViewModelProvider(requireActivity())[IncomeViewModel::class.java]
+            dateEditText.inputType = 0
 
             // Set up DatePickerDialog
             dateEditText.setOnClickListener {

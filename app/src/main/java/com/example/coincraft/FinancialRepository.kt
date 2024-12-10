@@ -53,4 +53,23 @@ class FinancialRepository {
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
     }
+
+    fun insertDummyFinancialGoals(userId: String, onComplete: (Boolean, String?) -> Unit) {
+        val financialRef = databaseReference.child(userId).child("FinancialGoals")
+
+        val dummyGoals = listOf(
+            FinancialModel(goalName = "Buy a Car", goalType = "Personal", amount = 5000.0, date = "2025-01-01"),
+            FinancialModel(goalName = "Vacation Fund", goalType = "Savings", amount = 3000.0, date = "2024-06-15"),
+            FinancialModel(goalName = "Emergency Fund", goalType = "Savings", amount = 10000.0, date = "2024-12-31"),
+            FinancialModel(goalName = "Start a Business", goalType = "Business", amount = 15000.0, date = "2025-05-01")
+        )
+
+        // Add each goal to the database
+        dummyGoals.forEach { goal ->
+            val goalRef = financialRef.push()
+            goalRef.setValue(goal)
+                .addOnSuccessListener { onComplete(true, null) }
+                .addOnFailureListener { onComplete(false, it.message) }
+        }
+    }
 }
