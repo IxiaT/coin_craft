@@ -2,10 +2,12 @@ package com.example.coincraft
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -75,7 +77,7 @@ class Home : AppCompatActivity() {
         expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
         financialViewModel = ViewModelProvider(this)[FinancialViewModel::class.java]
         incomeViewModel = ViewModelProvider(this)[IncomeViewModel::class.java]
-
+       
         //Recycler view
         fetchFinancialGoals()
 
@@ -105,6 +107,10 @@ class Home : AppCompatActivity() {
             val financialg = Intent(this@Home, FinancialGoalsActivity::class.java)
             startActivity(financialg)
         }
+        stngsBox.setOnClickListener {
+            showLogoutDialog()
+        }
+
 
         // Change intent to your respective activities
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -153,6 +159,25 @@ class Home : AppCompatActivity() {
             insets
         }
     }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                logoutUser()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun logoutUser() {
+        sharedPreferences.edit().clear().apply() // Clear all stored preferences
+        val intent = Intent(this@Home, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close the Home activity
+    }
+
 
     private fun fetchFinancialGoals() {
         financialViewModel.getFinancialGoals(userId) { financialGoals, error ->
