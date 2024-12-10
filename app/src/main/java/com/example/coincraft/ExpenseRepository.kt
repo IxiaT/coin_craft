@@ -1,5 +1,6 @@
 package com.example.coincraft
 
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -65,6 +66,22 @@ class ExpenseRepository {
 
             override fun onCancelled(error: DatabaseError) {
                 onComplete(0.0, error.message)
+            }
+        })
+    }
+
+    fun observeTotalExpenses(userId: String, onUpdate: (Double) -> Unit) {
+        val expenseRef = databaseReference.child(userId).child("Expenses")
+        expenseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val totalSum = snapshot.children
+                    .mapNotNull { it.getValue(ExpenseModel::class.java) }
+                    .sumOf { it.amount }
+                onUpdate(totalSum)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ExpenseRepository", "Error observing expenses: ${error.message}")
             }
         })
     }

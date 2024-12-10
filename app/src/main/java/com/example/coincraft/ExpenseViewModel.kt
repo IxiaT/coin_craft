@@ -33,4 +33,8 @@ class ExpenseViewModel : ViewModel() {
     fun getTotalExpenses(userId: String, onComplete: (Double, String?) -> Unit) {
         repository.getTotalExpenses(userId, onComplete)
     }
+
+    fun observeTotalExpenses(userId: String, onUpdate: (Double) -> Unit) {
+        repository.observeTotalExpenses(userId, onUpdate)
+    }
 }

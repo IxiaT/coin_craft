@@ -1,17 +1,14 @@
 package com.example.coincraft
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -38,13 +35,11 @@ class Home : AppCompatActivity() {
     private lateinit var xpBar: ProgressBar
     private lateinit var earnedBar: ProgressBar
     private lateinit var spentBar: ProgressBar
-    private lateinit var balance: TextView
+    private lateinit var balanceText: TextView
     private lateinit var earnedAmount: TextView
     private lateinit var spentAmount: TextView
     private lateinit var emptyTextView: TextView
     private lateinit var emptyImage: ImageView
-    private lateinit var incomeCard: CardView
-    private lateinit var spentCard: CardView
     private lateinit var finacialCard: CardView
     private lateinit var goalsRV: RecyclerView
     private lateinit var plusBtn: FloatingActionButton
@@ -66,7 +61,7 @@ class Home : AppCompatActivity() {
         xpBar = findViewById(R.id.xp_bar)
         earnedBar = findViewById(R.id.earned_bar)
         spentBar = findViewById(R.id.spent_bar)
-        balance = findViewById(R.id.balance_amount)
+        balanceText = findViewById(R.id.balance_amount)
         earnedAmount = findViewById(R.id.earned_amount)
         spentAmount = findViewById(R.id.spent_amount)
         plusBtn = findViewById(R.id.plus_button)
@@ -84,19 +79,15 @@ class Home : AppCompatActivity() {
         //Recycler view
         fetchFinancialGoals()
 
-        //Total Spent
-        fetchExpenses()
+        //Total Spent and Earned
+        calculatePercentage()
+        observeTransactions()
 
         plusBtn.setOnClickListener {
             val dialog = AddExpenseFragment()
             dialog.show(supportFragmentManager, "AddExpenseDialog")
+            calculatePercentage()
         }
-
-//        spentBtn.setOnClickListener {
-//            val expense = Intent(this@Home, ExpenseTracker::class.java)
-//            startActivity(expense)
-//            finish()
-//        }
 
         if (hp != null) {
             hpBar.setProgress(hp, true)
@@ -122,8 +113,11 @@ class Home : AppCompatActivity() {
 
             when (itemId) {
                 R.id.navigation_home -> {
-                    intent = Intent(this@Home, Home::class.java)
-                    startActivity(intent)
+                    if (this@Home !is Home) {
+                        intent = Intent(this@Home, Home::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
                 R.id.navigation_discover -> {
 //                    intent = Intent(this@Home, Transaction::class.java)
@@ -238,19 +232,55 @@ class Home : AppCompatActivity() {
                 spentAmount.text = totalExpenses.toString()
                 earnedAmount.text = totalIncome.toString()
 
-                // Calculate percentage
-                val percentage = if (totalIncome > 0) {
-                    val diff = totalIncome - totalExpenses
-                    (diff / totalIncome * 100).coerceAtLeast(0.0) // Ensure percentage is not negative
+                val spentPercentage = if (totalIncome > 0) {
+                    ((totalExpenses / totalIncome) * 100).coerceAtMost(100.0)
                 } else {
-                    0.0
+                    0.0 // Avoid division by zero
                 }
 
-                Log.d("ExpensesActivity", "Percentage: $percentage%")
-                spentBar.setProgress(percentage.toInt(), true)
-                earnedBar.setProgress(percentage.toInt(), true)
+                val earnedPercentage = (100.0 - spentPercentage).coerceAtLeast(0.0)
+                val balance = totalIncome - totalExpenses
+
+                balanceText.text = balance.toString()
+                spentBar.setProgress(spentPercentage.toInt(), true)
+                earnedBar.setProgress(earnedPercentage.toInt(), true)
             }
         }
     }
+
+    private fun observeTransactions() {
+        var totalExpenses = 0.0
+        var totalIncome = 0.0
+
+        expenseViewModel.observeTotalExpenses(userId) { newTotalExpenses ->
+            totalExpenses = newTotalExpenses
+            recalculatePercentages(totalExpenses, totalIncome)
+        }
+
+        incomeViewModel.observeTotalIncome(userId) { newTotalIncome ->
+            totalIncome = newTotalIncome
+            recalculatePercentages(totalExpenses, totalIncome)
+        }
+    }
+
+    private fun recalculatePercentages(totalExpenses: Double, totalIncome: Double) {
+        val spentPercentage = if (totalIncome > 0) {
+            ((totalExpenses / totalIncome) * 100).coerceAtMost(100.0)
+        } else {
+            0.0 // Avoid division by zero
+        }
+
+        val earnedPercentage = (100.0 - spentPercentage).coerceAtLeast(0.0)
+        val balance = totalIncome - totalExpenses
+
+        // Update the UI
+        balanceText.text = balance.toString()
+        spentAmount.text = totalExpenses.toString()
+        earnedAmount.text = totalIncome.toString()
+        spentBar.setProgress(spentPercentage.toInt(), true)
+        earnedBar.setProgress(earnedPercentage.toInt(), true)
+    }
+
+
 
 }
