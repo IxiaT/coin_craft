@@ -2,10 +2,12 @@ package com.example.coincraft
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -48,7 +50,7 @@ class Home : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.botnav)
         val spentBtn = findViewById<LinearLayout>(R.id.spent)
         val finacialCard = findViewById<CardView>(R.id.finacial_card)
-
+        val stngsBox = findViewById<ImageView>(R.id.settings_btn)
         //Recycler view
 
         val goal1 = FinancialModel("Buy a Car", "Savings", 10000.00, 100.00, "2024-12-31")
@@ -124,6 +126,10 @@ class Home : AppCompatActivity() {
             val financialg = Intent(this@Home, FinancialGoalsActivity::class.java)
             startActivity(financialg)
         }
+        stngsBox.setOnClickListener {
+            showLogoutDialog()
+        }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -131,6 +137,25 @@ class Home : AppCompatActivity() {
             insets
         }
     }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                logoutUser()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun logoutUser() {
+        sharedPreferences.edit().clear().apply() // Clear all stored preferences
+        val intent = Intent(this@Home, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close the Home activity
+    }
+
 
     private fun fetchFinancialGoals() {
         financialViewModel.getFinancialGoals(userId) { financialGoals, error ->
