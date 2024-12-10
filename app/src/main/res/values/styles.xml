@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="topbartxt">
-        <item name="android:textSize">48sp</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">#000000</item>
+
+    <!-- Style for Hint Text -->
+    <style name="HintTextStyle">
+        <item name="android:fontFamily">@font/silkscreen</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-
+    <!-- Style for Input Text -->
+    <style name="InputTextStyle">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>
