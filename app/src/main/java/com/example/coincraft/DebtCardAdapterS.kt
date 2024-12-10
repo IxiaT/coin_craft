@@ -28,6 +28,14 @@ class DebtCardAdapterS(
         holder.coinImg.setImageResource(card.coinImage)
         holder.txtAmount.text = card.amount
 
+        // Change text color based on the state
+        val color = if (card.state == "to pay") {
+            android.graphics.Color.parseColor("#F24E1E") // Red for "to pay"
+        } else {
+            android.graphics.Color.parseColor("#0ACF83") // Green for "to receive"
+        }
+        holder.txtAmount.setTextColor(color)
+
         holder.btnSelect.setOnClickListener {
             // Add your functionality for the plus button
         }

@@ -62,7 +62,7 @@
                 app:srcCompat="@drawable/coin" />
 
             <TextView
-                android:id="@+id/txtdate"
+                android:id="@+id/txtamount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

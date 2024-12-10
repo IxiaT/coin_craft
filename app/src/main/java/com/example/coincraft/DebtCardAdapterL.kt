@@ -27,6 +27,14 @@ class DebtCardAdapterL(
         holder.coinImg.setImageResource(card.coinImage)
         holder.txtAmount.text = card.amount
 
+        // Change text color based on the state
+        val color = if (card.state == "to pay") {
+            android.graphics.Color.parseColor("#F24E1E") // Red for "to pay"
+        } else {
+            android.graphics.Color.parseColor("#0ACF83") // Green for "to receive"
+        }
+        holder.txtAmount.setTextColor(color)
+
         holder.btnPlus.setOnClickListener {
             // Add your functionality for the plus button
         }
@@ -45,7 +53,7 @@ class DebtCardAdapterL(
         val txtName: TextView = itemView.findViewById(R.id.txtname)
         val txtDate: TextView = itemView.findViewById(R.id.txtdate)
         val coinImg: ImageView = itemView.findViewById(R.id.coinimg)
-        val txtAmount: TextView = itemView.findViewById(R.id.txtdate)
+        val txtAmount: TextView = itemView.findViewById(R.id.txtamount)
         val btnPlus: ImageButton = itemView.findViewById(R.id.btnplus)
         val btnMinus: ImageButton = itemView.findViewById(R.id.btnminus)
     }

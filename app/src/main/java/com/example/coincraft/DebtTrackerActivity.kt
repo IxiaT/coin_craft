@@ -2,7 +2,6 @@ package com.example.coincraft
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,127 +9,109 @@ import androidx.recyclerview.widget.RecyclerView
 
 class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAddedListener {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViews: RecyclerView
-    private lateinit var adapter: DebtCardAdapterL
-    private lateinit var adapters: DebtCardAdapterS
-    private lateinit var cardList: ArrayList<DebtCardModelL>
-    private lateinit var cardLists: ArrayList<DebtCardModelS>
+    private lateinit var topDebtsRecyclerView: RecyclerView
+    private lateinit var yourDebtsRecyclerView: RecyclerView
+    private lateinit var topDebtsAdapter: DebtCardAdapterL
+    private lateinit var yourDebtsAdapter: DebtCardAdapterS
+    private lateinit var topDebtsList: ArrayList<DebtCardModelL>
+    private lateinit var yourDebtsList: ArrayList<DebtCardModelS>
     private lateinit var addDebtButton: ImageButton
 
-    @SuppressLint("MissingInflatedId")
+    companion object {
+        val DEFAULT_PROFILE_IMAGE = R.drawable.avatar
+        val DEFAULT_COIN_IMAGE = R.drawable.coin
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debt_tracker)
 
-
+        // Initialize views
         addDebtButton = findViewById(R.id.newdebtbtn)
+        topDebtsRecyclerView = findViewById(R.id.rview_topdebts)
+        yourDebtsRecyclerView = findViewById(R.id.rview_yourdebts)
+
+        // Setup RecyclerViews
+        setupRecyclerView(topDebtsRecyclerView)
+        setupRecyclerView(yourDebtsRecyclerView)
+
+        // Handle "Add Debt" button click
         addDebtButton.setOnClickListener {
             val dialog = NewDebtDialogFragment()
             dialog.show(supportFragmentManager, "NewDebtDialog")
         }
 
+        // Populate initial data
+        topDebtsList = generateTopDebts()
+        yourDebtsList = generateYourDebts()
 
-        recyclerView = findViewById(R.id.rview_topdebts)
+        // Bind data to adapters
+        topDebtsAdapter = DebtCardAdapterL(this, topDebtsList)
+        yourDebtsAdapter = DebtCardAdapterS(this, yourDebtsList)
+
+        topDebtsRecyclerView.adapter = topDebtsAdapter
+        yourDebtsRecyclerView.adapter = yourDebtsAdapter
+    }
+
+    // Set up RecyclerView layout to always be horizontal
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        cardList = ArrayList()
-        cardList.add(
+    }
+
+    // Generate sample data for "Top Debts"
+    private fun generateTopDebts(): ArrayList<DebtCardModelL> {
+        return arrayListOf(
             DebtCardModelL(
-                profileImage = R.drawable.avatar,
+                profileImage = DEFAULT_PROFILE_IMAGE,
                 name = "Gandalf The Great",
                 date = "November 30, 2034",
-                coinImage = R.drawable.coin,
-                amount = "500.00"
-            )
-        )
-        cardList.add(
+                coinImage = DEFAULT_COIN_IMAGE,
+                amount = "500.00",
+                state = "to receive"
+            ),
             DebtCardModelL(
-                profileImage = R.drawable.avatar, // You can replace this with another drawable resource
+                profileImage = DEFAULT_PROFILE_IMAGE,
                 name = "Frodo Baggins",
                 date = "December 8, 2034",
-                coinImage = R.drawable.coin,
-                amount = "1500.00"
+                coinImage = DEFAULT_COIN_IMAGE,
+                amount = "1500.00",
+                state = "to pay"
             )
         )
-        // Add more items as needed
-
-        adapter = DebtCardAdapterL(this, cardList)
-        recyclerView.adapter = adapter
-
-
-        recyclerViews = findViewById(R.id.rview_yourdebts)
-        recyclerViews.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        cardLists = ArrayList()
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-        cardLists.add (
-            DebtCardModelS(
-                profileImage = R.drawable.avatar,
-                name = "Legolas",
-                date = "12/24/24",
-                coinImage = R.drawable.coin,
-                amount = "50.00"
-            )
-        )
-
-        adapters = DebtCardAdapterS(this, cardLists)
-        recyclerViews.adapter = adapters
     }
 
-    override fun onDebtAdded(amount: String, name: String, date: String) {
-        // Handle the data sent from the dialog
-        cardLists.add(
+    // Generate sample data for "Your Debts"
+    private fun generateYourDebts(): ArrayList<DebtCardModelS> {
+        val debtEntries = arrayListOf<DebtCardModelS>()
+        for (i in 1..6) {
+            debtEntries.add(
+                DebtCardModelS(
+                    profileImage = DEFAULT_PROFILE_IMAGE,
+                    name = "Legolas",
+                    date = "12/24/24",
+                    coinImage = DEFAULT_COIN_IMAGE,
+                    amount = "50.00",
+                    state = "to pay"
+                )
+            )
+        }
+        return debtEntries
+    }
+
+    // Add new debt data dynamically
+    override fun onDebtAdded(amount: String, name: String, date: String, state: String) {
+        yourDebtsList.add(
             DebtCardModelS(
-                profileImage = R.drawable.avatar, // Adjust based on your implementation
+                profileImage = DEFAULT_PROFILE_IMAGE,
                 name = name,
                 date = date,
-                coinImage = R.drawable.coin,
-                amount = amount
+                coinImage = DEFAULT_COIN_IMAGE,
+                amount = amount,
+                state = state
             )
         )
-        adapters.notifyDataSetChanged()
+        yourDebtsAdapter.notifyDataSetChanged()
     }
+
+
 }

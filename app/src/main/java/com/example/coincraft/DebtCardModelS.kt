@@ -5,5 +5,6 @@ data class DebtCardModelS(
     val name: String,
     val date: String,
     val coinImage: Int,
-    val amount: String
+    val amount: String,
+    var state: String
 )
