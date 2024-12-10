@@ -1,6 +1,7 @@
 package com.example.coincraft
 
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class BudgetingActivity : AppCompatActivity() {
+
+    private lateinit var editTotalBudget: ImageButton
 
     private lateinit var NeedsRecyclerView: RecyclerView
     private lateinit var NeedsDataList: ArrayList<NeedWantDataClass>
@@ -23,18 +26,11 @@ class BudgetingActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_budgeting)
 
+        editTotalBudget = findViewById(R.id.bseditbtn)
+
+
         NeedsCategory = arrayOf(
-            "Education",
-            "Food",
-            "Groceries",
-            "Laundry",
-            "Medical",
-            "Payment",
-            "Phone",
-            "Rent",
-            "Tax",
-            "Transportation",
-            "Utilities"
+            "Education", "Food", "Groceries", "Laundry", "Medical", "Payment", "Phone", "Rent", "Tax", "Transportation", "Utilities"
         )
 
         NeedsRecyclerView = findViewById(R.id.needsrecyclerview)
@@ -46,16 +42,7 @@ class BudgetingActivity : AppCompatActivity() {
 
 
         WantsCategory = arrayOf(
-            "Cable",
-            "Collectibles",
-            "Entertainment",
-            "Games",
-            "Online Shopping",
-            "Loans Payment",
-            "Shopping",
-            "Subscriptions",
-            "Travel",
-            "Uncategorized"
+            "Cable", "Collectibles", "Entertainment", "Games", "Online Shopping", "Loans Payment", "Shopping", "Subscriptions", "Travel", "Uncategorized"
         )
 
         WantsRecyclerView = findViewById(R.id.wantsrecyclerview)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -11,10 +12,8 @@
 
     <LinearLayout
         android:id="@+id/topbudgetbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="65dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="false"
         android:background="@color/primary_yellow"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -25,20 +24,19 @@
 
         <ImageButton
             android:id="@+id/backbtn"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="15dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="15dp"
+            android:background="@android:color/transparent"
             app:srcCompat="@drawable/backbtn" />
 
         <TextView
             android:id="@+id/topbartxt"
-            android:layout_width="200dp"
-            android:layout_height="33dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/silkscreen_bold"
-            android:gravity="center_horizontal|center_vertical"
-            android:lineSpacingExtra="8sp"
+            android:gravity="center_vertical"
             android:text="@string/topbudgetbar"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -46,21 +44,20 @@
 
     <LinearLayout
         android:id="@+id/monthly_area"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/budgetstats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topbudgetbar">
 
         <ImageButton
             android:id="@+id/month_backbtn"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="25dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="25dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/backbtn" />
@@ -69,8 +66,8 @@
             android:id="@+id/monthyear_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_weight="1"
             android:fontFamily="@font/silkscreen_regular"
             android:text="MONTH YYYY"
@@ -80,388 +77,16 @@
 
         <ImageButton
             android:id="@+id/monthnextbtn"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginRight="25dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="25dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/forwardbtn" />
-
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/budgetstats"
-        android:layout_width="380dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/needscard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthly_area">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
 
-            <TextView
-                android:id="@+id/budgetstattxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/silkscreen_bold"
-                android:text="BUDGET STATS"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/bseditbtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/editbtn" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="5dp"
-                android:background="@color/grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/budgetstattxt" />
-
-            <TextView
-                android:id="@+id/tbtxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="TOTAL BUDGET: "
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/tetxt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <TextView
-                android:id="@+id/tetxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="TOTAL EXPENSES: "
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/brtxt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tbtxt" />
-
-            <TextView
-                android:id="@+id/brtxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="BUDGET REMAINING: "
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tetxt" />
-
-            <ImageView
-                android:id="@+id/totalbudgetcoin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="1dp"
-                app:layout_constraintEnd_toStartOf="@+id/totalbudgettxt"
-                app:layout_constraintTop_toBottomOf="@+id/view"
-                app:srcCompat="@drawable/coin" />
-
-            <TextView
-                android:id="@+id/totalbudgettxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="1000.00"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/totalexpensestxt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <ImageView
-                android:id="@+id/totalexpensescoin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="1dp"
-                app:layout_constraintBottom_toTopOf="@+id/budgetremainingcoin"
-                app:layout_constraintEnd_toStartOf="@+id/totalexpensestxt"
-                app:layout_constraintTop_toBottomOf="@+id/totalbudgetcoin"
-                app:srcCompat="@drawable/coin" />
-
-            <TextView
-                android:id="@+id/totalexpensestxt"
-                android:layout_width="59dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="764.00"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/budgetremainingtxt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalbudgettxt" />
-
-            <ImageView
-                android:id="@+id/budgetremainingcoin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/budgetremainingtxt"
-                app:layout_constraintTop_toBottomOf="@+id/totalexpensescoin"
-                app:srcCompat="@drawable/coin" />
-
-            <TextView
-                android:id="@+id/budgetremainingtxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="236.00"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalexpensestxt" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/needscard"
-        android:layout_width="380dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/wantscard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/budgetstats">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="22dp"
-            tools:layout_editor_absoluteY="301dp">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/silkscreen_bold"
-                android:text="NEEDS"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="BUDGET LIMIT: "
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-            <ImageView
-                android:id="@+id/tbcoin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/coin" />
-
-            <TextView
-                android:id="@+id/needbudgetlimit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="500.00"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/tbcoin"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/neededitbtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/editbtn" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@color/grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/needsrecyclerview"
-                android:layout_width="360dp"
-                android:layout_height="200dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/wantscard"
-        android:layout_width="380dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/needscard">
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="22dp"
-            tools:layout_editor_absoluteY="301dp">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/silkscreen_bold"
-                android:text="WANTS"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="BUDGET LIMIT: "
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-            <ImageView
-                android:id="@+id/wblcoin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/coin" />
-
-            <TextView
-                android:id="@+id/wantsbudgetlimit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/silkscreen_regular"
-                android:text="500.00"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/wblcoin"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/wanteditbtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/editbtn" />
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@color/grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/wantsrecyclerview"
-                android:layout_width="360dp"
-                android:layout_height="200dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
