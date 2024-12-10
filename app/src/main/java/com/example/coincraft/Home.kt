@@ -28,6 +28,7 @@ class Home : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var financialViewModel: FinancialViewModel
     private lateinit var expenseViewModel: ExpenseViewModel
+    private lateinit var incomeViewModel: IncomeViewModel
     private lateinit var userId: String
 
     private lateinit var hpBar: ProgressBar
@@ -73,15 +74,13 @@ class Home : AppCompatActivity() {
         //Initialize ViewModels
         expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
         financialViewModel = ViewModelProvider(this)[FinancialViewModel::class.java]
+        incomeViewModel = ViewModelProvider(this)[IncomeViewModel::class.java]
 
         //Recycler view
         fetchFinancialGoals()
 
-//        val goalsRV = findViewById<RecyclerView>(R.id.horizontal_finacial_goal_rv)
-//        val adapter = HomeGoalsAdapter()
-//        goalsRV.adapter = adapter
-
-
+        //Total Spent
+        fetchExpenses()
 
         plusBtn.setOnClickListener {
             val dialog = AddExpenseFragment()
@@ -114,22 +113,18 @@ class Home : AppCompatActivity() {
 
             when (itemId) {
                 R.id.navigation_home -> {
-                    Toast.makeText(this@Home, "Home", Toast.LENGTH_SHORT).show()
                     intent = Intent(this@Home, Home::class.java)
                     startActivity(intent)
                 }
                 R.id.navigation_discover -> {
-                    Toast.makeText(this@Home, "Transaction", Toast.LENGTH_SHORT).show()
 //                    intent = Intent(this@Home, Transaction::class.java)
 //                    startActivity(intent)
                 }
                 R.id.navigation_likes -> {
-                    Toast.makeText(this@Home, "Budgeting", Toast.LENGTH_SHORT).show()
 //                    intent = Intent(this@Home, Budgeting::class.java)
 //                    startActivity(intent)
                 }
                 R.id.navigation_account -> {
-                    Toast.makeText(this@Home, "Account", Toast.LENGTH_SHORT).show()
 //                    val intent = Intent(this@Home, Debt::class.java)
 //                    startActivity(intent)
                 }
@@ -175,7 +170,8 @@ class Home : AppCompatActivity() {
 
                 // Update the UI, e.g., RecyclerView
                 goalsRV = findViewById(R.id.horizontal_finacial_goal_rv)!!
-                goalsRV.adapter = HomeGoalsAdapter(financialGoals)
+                val adapter = HomeGoalsAdapter(financialGoals)
+                goalsRV.adapter = adapter
                 goalsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             } else {
                 // Handle error
@@ -186,18 +182,42 @@ class Home : AppCompatActivity() {
     }
 
     private fun fetchExpenses() {
-        expenseViewModel.getAllExpenses(userId) { expenses, error ->
+        expenseViewModel.getTotalExpenses(userId) { totalSpent, error ->
             if (error == null) {
                 // Successfully retrieved expenses
-                Log.d("ExpensesActivity", "Expenses: $expenses")
-
-                // Pass the list to the adapter
-//                val recyclerView: RecyclerView = findViewById(R.id.expensesRecyclerView)
-//                recyclerView.adapter = ExpensesAdapter(expenses)
+                Log.d("ExpensesActivity", "Expenses: $totalSpent")
+                spentAmount.text = totalSpent.toString()
             } else {
                 // Handle error
                 Log.e("ExpensesActivity", "Error fetching expenses: $error")
                 Toast.makeText(this, "Error fetching expenses", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun calculatePercentage() {
+        expenseViewModel.getTotalExpenses(userId) { totalExpenses, expenseError ->
+            if (expenseError != null) {
+                Log.e("ExpensesActivity", "Error fetching expenses: $expenseError")
+                return@getTotalExpenses
+            }
+
+            incomeViewModel.getTotalIncome(userId) { totalIncome, incomeError ->
+                if (incomeError != null) {
+                    Log.e("ExpensesActivity", "Error fetching income: $incomeError")
+                    return@getTotalIncome
+                }
+
+                // Calculate percentage
+                val percentage = if (totalIncome > 0) {
+                    val diff = totalIncome - totalExpenses
+                    (diff / totalIncome * 100).coerceAtLeast(0.0) // Ensure percentage is not negative
+                } else {
+                    0.0
+                }
+
+                Log.d("ExpensesActivity", "Percentage: $percentage%")
+//                findViewById<TextView>(R.id.percentageTextView).text = "Remaining: $percentage%"
             }
         }
     }

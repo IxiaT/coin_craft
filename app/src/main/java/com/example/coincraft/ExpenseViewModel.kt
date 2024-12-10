@@ -29,4 +29,8 @@ class ExpenseViewModel : ViewModel() {
     fun deleteExpense(userId: String, expenseID: String, onComplete: (Boolean, String?) -> Unit) {
         repository.deleteExpense(userId, expenseID, onComplete)
     }
+
+    fun getTotalExpenses(userId: String, onComplete: (Double, String?) -> Unit) {
+        repository.getTotalExpenses(userId, onComplete)
+    }
 }

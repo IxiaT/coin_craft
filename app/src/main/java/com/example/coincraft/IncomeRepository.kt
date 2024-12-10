@@ -53,4 +53,20 @@ class IncomeRepository {
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
     }
+
+    fun getTotalIncome(userId: String, onComplete: (Double, String?) -> Unit) {
+        val incomeRef = databaseReference.child(userId).child("Income")
+        incomeRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val totalSum = snapshot.children
+                    .mapNotNull { it.getValue(IncomeModel::class.java) }
+                    .sumOf { it.amount }
+                onComplete(totalSum, null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onComplete(0.0, error.message)
+            }
+        })
+    }
 }

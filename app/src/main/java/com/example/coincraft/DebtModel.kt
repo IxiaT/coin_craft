@@ -8,5 +8,5 @@ class DebtModel (
     var partialPaid: Double = 0.00,
     var status: String = ""
 ){
-    constructor() : this(0.00, "Uncategorized", "No Notes", "")
+    constructor() : this(0.00, "", "No Notes", "", 0.00, "")
 }
