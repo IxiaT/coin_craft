@@ -207,6 +207,8 @@ class Home : AppCompatActivity() {
                     Log.e("ExpensesActivity", "Error fetching income: $incomeError")
                     return@getTotalIncome
                 }
+                spentAmount.text = totalExpenses.toString()
+                earnedAmount.text = totalIncome.toString()
 
                 // Calculate percentage
                 val percentage = if (totalIncome > 0) {
@@ -217,7 +219,8 @@ class Home : AppCompatActivity() {
                 }
 
                 Log.d("ExpensesActivity", "Percentage: $percentage%")
-//                findViewById<TextView>(R.id.percentageTextView).text = "Remaining: $percentage%"
+                spentBar.setProgress(percentage.toInt(), true)
+                earnedBar.setProgress(percentage.toInt(), true)
             }
         }
     }
