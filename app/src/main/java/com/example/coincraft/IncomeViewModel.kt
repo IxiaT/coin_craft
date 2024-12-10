@@ -28,4 +28,8 @@ class IncomeViewModel : ViewModel() {
     fun getTotalIncome(userId: String, onComplete: (Double, String?) -> Unit) {
         repository.getTotalIncome(userId, onComplete)
     }
+
+    fun observeTotalIncome(userId: String, onUpdate: (Double) -> Unit) {
+        repository.observeTotalIncome(userId, onUpdate)
+    }
 }
