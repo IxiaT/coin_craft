@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,7 +27,24 @@ class Home : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var financialViewModel: FinancialViewModel
+    private lateinit var expenseViewModel: ExpenseViewModel
     private lateinit var userId: String
+
+    private lateinit var hpBar: ProgressBar
+    private lateinit var xpBar: ProgressBar
+    private lateinit var earnedBar: ProgressBar
+    private lateinit var spentBar: ProgressBar
+    private lateinit var balance: TextView
+    private lateinit var earnedAmount: TextView
+    private lateinit var spentAmount: TextView
+    private lateinit var emptyTextView: TextView
+    private lateinit var emptyImage: ImageView
+    private lateinit var incomeCard: CardView
+    private lateinit var spentCard: CardView
+    private lateinit var finacialCard: CardView
+    private lateinit var goalsRV: RecyclerView
+    private lateinit var plusBtn: FloatingActionButton
+    private lateinit var bottomNav: BottomNavigationView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,80 +57,42 @@ class Home : AppCompatActivity() {
         val hp = sharedPreferences.getString("hp", null)?.toInt()
         val xp = sharedPreferences.getString("xp", null)?.toInt()
 
-        val hpBar = findViewById<ProgressBar>(R.id.hp_bar)
-        val xpBar = findViewById<ProgressBar>(R.id.xp_bar)
-        val earnedBar = findViewById<ProgressBar>(R.id.earned_bar)
-        val spentBar = findViewById<ProgressBar>(R.id.spent_bar)
-        val balance = findViewById<TextView>(R.id.balance_amount)
-        val earnedAmount = findViewById<TextView>(R.id.earned_amount)
-        val spentAmount = findViewById<TextView>(R.id.spent_amount)
-        val plusBtn = findViewById<FloatingActionButton>(R.id.plus_button)
-        val bottomNav = findViewById<BottomNavigationView>(R.id.botnav)
-        val spentBtn = findViewById<LinearLayout>(R.id.spent)
-        val finacialCard = findViewById<CardView>(R.id.finacial_card)
+        hpBar = findViewById(R.id.hp_bar)
+        xpBar = findViewById(R.id.xp_bar)
+        earnedBar = findViewById(R.id.earned_bar)
+        spentBar = findViewById(R.id.spent_bar)
+        balance = findViewById(R.id.balance_amount)
+        earnedAmount = findViewById(R.id.earned_amount)
+        spentAmount = findViewById(R.id.spent_amount)
+        plusBtn = findViewById(R.id.plus_button)
+        bottomNav = findViewById(R.id.botnav)
+        finacialCard = findViewById(R.id.finacial_card)
+        emptyImage = findViewById(R.id.empty_list_icon)
+        emptyTextView = findViewById(R.id.empty_list_text)
+
+        //Initialize ViewModels
+        expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
+        financialViewModel = ViewModelProvider(this)[FinancialViewModel::class.java]
 
         //Recycler view
-
-        val goal1 = FinancialModel("Buy a Car", "Savings", 10000.00, 100.00, "2024-12-31")
-        val goal2 = FinancialModel("Holiday Trip", "Savings", 5000.00, 3540.00,"2024-06-15")
-        val goal3 = FinancialModel("Emergency Fund", "Savings", 2000.00, 500.00,"2024-03-01")
-
-//        val goals: List<FinancialModel> = financialViewModel.getFinancialGoals(userId, null) { success, error ->
-//            if (success) {
-//                    Toast.makeText(this, "Fin added successfully", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
-//                }
-//        }
-//
-//
-//        if(userId != null) {
-//            financialViewModel.addFinancialGoal(userId, goal1) { success, error ->
-//                if (success) {
-//                    Toast.makeText(this, "Expense added successfully", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-
-//                financialViewModel.addFinancialGoal(userId, goal2){ success, error ->
-//                    if (success) {
-//                        Toast.makeText(this, "Expense added successfully", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        Toast.makeText(this, "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    financialViewModel.addFinancialGoal(userId, goal3){ success, error ->
-//                        if (success) {
-//                            Toast.makeText(this, "Expense added successfully", Toast.LENGTH_SHORT).show()
-//                        } else {
-//                            Toast.makeText(this, "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
-//                        }
-//        }
-
-//        val goal = financialViewModel.getFinancialGoals(userId) { success, error ->
-//            if (success) {
-//                Toast.makeText(this, "Expense added successfully", Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this, "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
-//            }
+        fetchFinancialGoals()
 
 //        val goalsRV = findViewById<RecyclerView>(R.id.horizontal_finacial_goal_rv)
 //        val adapter = HomeGoalsAdapter()
 //        goalsRV.adapter = adapter
-//        goalsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+
 
         plusBtn.setOnClickListener {
             val dialog = AddExpenseFragment()
             dialog.show(supportFragmentManager, "AddExpenseDialog")
         }
 
-        spentBtn.setOnClickListener {
-            val expense = Intent(this@Home, ExpenseTracker::class.java)
-            startActivity(expense)
-            finish()
-        }
+//        spentBtn.setOnClickListener {
+//            val expense = Intent(this@Home, ExpenseTracker::class.java)
+//            startActivity(expense)
+//            finish()
+//        }
 
         if (hp != null) {
             hpBar.setProgress(hp, true)
@@ -123,6 +105,51 @@ class Home : AppCompatActivity() {
         finacialCard.setOnClickListener{
 //            val fin = Intent(this@Home, )
 //            startActivity(fin)
+        }
+
+        // Change intent to your respective activities
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            val itemId = item.itemId
+            var intent: Intent? = null
+
+            when (itemId) {
+                R.id.navigation_home -> {
+                    Toast.makeText(this@Home, "Home", Toast.LENGTH_SHORT).show()
+                    intent = Intent(this@Home, Home::class.java)
+                    startActivity(intent)
+                }
+                R.id.navigation_discover -> {
+                    Toast.makeText(this@Home, "Transaction", Toast.LENGTH_SHORT).show()
+//                    intent = Intent(this@Home, Transaction::class.java)
+//                    startActivity(intent)
+                }
+                R.id.navigation_likes -> {
+                    Toast.makeText(this@Home, "Budgeting", Toast.LENGTH_SHORT).show()
+//                    intent = Intent(this@Home, Budgeting::class.java)
+//                    startActivity(intent)
+                }
+                R.id.navigation_account -> {
+                    Toast.makeText(this@Home, "Account", Toast.LENGTH_SHORT).show()
+//                    val intent = Intent(this@Home, Debt::class.java)
+//                    startActivity(intent)
+                }
+            }
+
+            val selectedItem = bottomNav.findViewById<View>(item.itemId)
+            selectedItem?.animate()?.apply {
+                scaleX(1.2f)
+                scaleY(1.2f)
+                duration = 100
+                withEndAction {
+                    selectedItem.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(100)
+                        .start()
+                }
+            }?.start()
+
+            true
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -138,13 +165,39 @@ class Home : AppCompatActivity() {
                 // Successfully retrieved goals
                 Log.d("FinancialGoalsFragment", "Goals: $financialGoals")
 
+                if(financialGoals.isEmpty()){
+                    emptyImage.visibility = View.VISIBLE
+                    emptyTextView.visibility = View.VISIBLE
+                } else {
+                    emptyImage.visibility = View.GONE
+                    emptyTextView.visibility = View.GONE
+                }
+
                 // Update the UI, e.g., RecyclerView
-                val recyclerView: RecyclerView = findViewById(R.id.horizontal_finacial_goal_rv)!!
-                recyclerView.adapter = HomeGoalsAdapter(financialGoals)
+                goalsRV = findViewById(R.id.horizontal_finacial_goal_rv)!!
+                goalsRV.adapter = HomeGoalsAdapter(financialGoals)
+                goalsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             } else {
                 // Handle error
                 Log.e("FinancialGoalsFragment", "Error fetching goals: $error")
                 Toast.makeText(this, "Error fetching financial goals", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun fetchExpenses() {
+        expenseViewModel.getAllExpenses(userId) { expenses, error ->
+            if (error == null) {
+                // Successfully retrieved expenses
+                Log.d("ExpensesActivity", "Expenses: $expenses")
+
+                // Pass the list to the adapter
+//                val recyclerView: RecyclerView = findViewById(R.id.expensesRecyclerView)
+//                recyclerView.adapter = ExpensesAdapter(expenses)
+            } else {
+                // Handle error
+                Log.e("ExpensesActivity", "Error fetching expenses: $error")
+                Toast.makeText(this, "Error fetching expenses", Toast.LENGTH_SHORT).show()
             }
         }
     }

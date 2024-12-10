@@ -24,4 +24,9 @@ class FinancialViewModel : ViewModel() {
     fun deleteFinancialGoal(userId: String, goalId: String, onComplete: (Boolean, String?) -> Unit) {
         repository.deleteFinancialGoal(userId, goalId, onComplete)
     }
+
+    //Dummy Values
+    fun insertDummyData(userId: String, onComplete: (Boolean, String?) -> Unit) {
+        repository.insertDummyFinancialGoals(userId, onComplete)
+    }
 }
