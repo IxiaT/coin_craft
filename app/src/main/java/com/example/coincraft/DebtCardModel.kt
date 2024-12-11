@@ -8,3 +8,6 @@ data class DebtCardModel(
     var amount: String,
     var state: String
 )
+    {
+        constructor() : this(0, "", "", 0, "", "")
+    }

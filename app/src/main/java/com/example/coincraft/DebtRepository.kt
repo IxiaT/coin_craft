@@ -9,11 +9,11 @@ import com.google.firebase.database.ValueEventListener
 class DebtRepository {
     private val databaseReference: DatabaseReference = FirebaseDatabase
         .getInstance()
-        .getReference("UserAccounts")
+        .getReference("Users")
 
     // Create
     fun addDebt(userId: String, debt: DebtModel, onComplete: (Boolean, String?) -> Unit) {
-        val debtRef = databaseReference.child(userId).child("Debt").push()
+        val debtRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Debts")
         debtRef.setValue(debt)
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
