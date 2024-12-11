@@ -119,15 +119,15 @@ class Home : AppCompatActivity() {
                         finish()
                     }
                 }
-                R.id.navigation_discover -> {
-//                    intent = Intent(this@Home, Transaction::class.java)
-//                    startActivity(intent)
+                R.id.navigation_transaction -> {
+                    intent = Intent(this@Home, Transaction::class.java)
+                    startActivity(intent)
                 }
-                R.id.navigation_likes -> {
+                R.id.navigation_budgeting-> {
 //                    intent = Intent(this@Home, Budgeting::class.java)
 //                    startActivity(intent)
                 }
-                R.id.navigation_account -> {
+                R.id.navigation_debt -> {
                     val intent = Intent(this@Home, DebtTrackerActivity::class.java)
                     startActivity(intent)
                 }

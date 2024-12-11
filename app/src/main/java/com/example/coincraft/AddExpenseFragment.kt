@@ -65,6 +65,7 @@ class AddExpenseFragment: DialogFragment() {
             expenseViewModel = ViewModelProvider(requireActivity())[ExpenseViewModel::class.java]
             incomeViewModel = ViewModelProvider(requireActivity())[IncomeViewModel::class.java]
             dateEditText.inputType = 0
+            dateEditText.setText(SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(calendar.time))
 
             // Set up DatePickerDialog
             dateEditText.setOnClickListener {
@@ -72,7 +73,7 @@ class AddExpenseFragment: DialogFragment() {
                     requireContext(),
                     { _, year, month, dayOfMonth ->
                         calendar.set(year, month, dayOfMonth)
-                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        val dateFormat = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
                         dateEditText.setText(dateFormat.format(calendar.time))
                     },
                     calendar.get(Calendar.YEAR),
@@ -80,22 +81,6 @@ class AddExpenseFragment: DialogFragment() {
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
-
-            // Set up TimePickerDialog
-//        timeEditText.setOnClickListener {
-//            TimePickerDialog(
-//                requireContext(),
-//                { _, hour, minute ->
-//                    calendar.set(Calendar.HOUR_OF_DAY, hour)
-//                    calendar.set(Calendar.MINUTE, minute)
-//                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-//                    timeEditText.setText(timeFormat.format(calendar.time))
-//                },
-//                calendar.get(Calendar.HOUR_OF_DAY),
-//                calendar.get(Calendar.MINUTE),
-//                true
-//            ).show()
-//        }
             incomeButton.setOnClickListener {
                 setActiveButton("MONEY_IN")
             }
