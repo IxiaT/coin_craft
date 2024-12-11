@@ -38,6 +38,10 @@
         <activity android:name=".FinancialGoalsActivity"
             android:exported="false" />
 
+        <activity android:name=".DebtTrackerActivity"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>

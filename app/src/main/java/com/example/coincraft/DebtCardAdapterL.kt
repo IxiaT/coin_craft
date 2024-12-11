@@ -8,10 +8,11 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Color
 
 class DebtCardAdapterL(
     private val context: Context,
-    private var cardList: List<DebtCardModel>,
+    private var cardList: List<DebtCardModel>, // Will update this with new data
     private val onItemClicked: (DebtCardModel, Int) -> Unit
 ) : RecyclerView.Adapter<DebtCardAdapterL.CardViewHolder>() {
 
@@ -30,9 +31,9 @@ class DebtCardAdapterL(
 
         // Change text color based on the state
         val color = if (card.state == "to pay") {
-            android.graphics.Color.parseColor("#F24E1E") // Red for "to pay"
+            Color.parseColor("#F24E1E") // Red for "to pay"
         } else {
-            android.graphics.Color.parseColor("#0ACF83") // Green for "to receive"
+            Color.parseColor("#0ACF83") // Green for "to receive"
         }
         holder.txtAmount.setTextColor(color)
 
@@ -42,9 +43,8 @@ class DebtCardAdapterL(
         }
 
         holder.btnPlus.setOnClickListener {
-            // Add your functionality for the plus button
+            // Add your functionality for the plus button (for example, to increase the amount or mark the debt as paid)
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -60,8 +60,9 @@ class DebtCardAdapterL(
         val btnPlus: ImageButton = itemView.findViewById(R.id.btnplus)
     }
 
+    // Update the adapter's data and refresh the RecyclerView
     fun updateData(newCardList: List<DebtCardModel>) {
         cardList = newCardList
-        notifyDataSetChanged()  // Notify that the data set has changed
+        notifyDataSetChanged()  // Notify the adapter that the data set has changed
     }
 }

@@ -9,7 +9,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.DialogFragment
-import com.example.coincraft.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
 class NewDebtDialogFragment : DialogFragment() {
@@ -17,6 +18,7 @@ class NewDebtDialogFragment : DialogFragment() {
     interface OnDebtAddedListener {
         fun onDebtAdded(amount: String, name: String, date: String, state: String)
     }
+
     private lateinit var toReceiveButton: ImageButton
     private lateinit var toPayButton: ImageButton
     private lateinit var amountEditText: EditText
@@ -75,7 +77,7 @@ class NewDebtDialogFragment : DialogFragment() {
             } else if (!isPositiveNumber(amountText)) {
                 amountEditText.error = "Amount must be a positive number"
             } else {
-                val amount = amountText.toDoubleOrNull() // Convert to Double
+                val amount = amountText.toDoubleOrNull()
                 if (amount == null) {
                     amountEditText.error = "Invalid number format"
                     return@setOnClickListener
@@ -91,31 +93,57 @@ class NewDebtDialogFragment : DialogFragment() {
                         else -> null
                     }
                     if (state != null) {
-                        (activity as? OnDebtAddedListener)?.onDebtAdded(
-                            amount.toString(), // Send as a String or Double based on your requirement
-                            name,
-                            date,
-                            state
-                        )
-                        dismiss() // Close the dialog
+                        val userId = FirebaseAuth.getInstance().currentUser?.uid
+                        if (userId != null) {
+                            // Generate a unique key for the debt
+                            val database = FirebaseDatabase.getInstance().reference
+                            val debtId = database.child("debts").child(userId).push().key
+
+                            if (debtId != null) {
+                                val debtData = mapOf(
+                                    "id" to debtId,
+                                    "profileImage" to R.drawable.avatar,
+                                    "name" to name,
+                                    "date" to date,
+                                    "coinImage" to R.drawable.coin,
+                                    "amount" to amount.toString(),
+                                    "state" to state
+                                )
+
+                                database.child("debts").child(userId).child(debtId).setValue(debtData)
+                                    .addOnSuccessListener {
+                                        (activity as? OnDebtAddedListener)?.onDebtAdded(
+                                            amount.toString(),
+                                            name,
+                                            date,
+                                            state
+                                        )
+                                        dismiss()
+                                    }
+                                    .addOnFailureListener {
+                                        amountEditText.error = "Failed to add debt"
+                                    }
+                            } else {
+                                amountEditText.error = "Failed to generate debt ID"
+                            }
+                        } else {
+                            amountEditText.error = "User not logged in"
+                        }
                     }
                 }
             }
         }
 
-        // Handle Close Button Click
         closeButton.setOnClickListener {
-            dismiss() // Close the dialog
+            dismiss()
         }
 
-        // Set the custom layout as the dialog view
         builder.setView(dialogView)
 
         return builder.create()
     }
 
     private fun updateButtonStates() {
-        // Update the drawables for the buttons based on their states
         toReceiveButton.setImageResource(
             if (isToReceiveActive) R.drawable.toreceive_active else R.drawable.toreceive_inactive
         )
@@ -133,7 +161,6 @@ class NewDebtDialogFragment : DialogFragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                // Format the selected date and set it to the EditText
                 val formattedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                 dateEditText.setText(formattedDate)
             },
@@ -144,13 +171,13 @@ class NewDebtDialogFragment : DialogFragment() {
 
         datePickerDialog.show()
     }
+
     private fun isPositiveNumber(str: String): Boolean {
         return try {
             val number = str.toDouble()
-            number > 0 // Check if the number is positive
+            number > 0
         } catch (e: NumberFormatException) {
-            false // Return false if it's not a valid number
+            false
         }
     }
-
 }

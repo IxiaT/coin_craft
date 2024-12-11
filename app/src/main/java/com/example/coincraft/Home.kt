@@ -128,8 +128,8 @@ class Home : AppCompatActivity() {
 //                    startActivity(intent)
                 }
                 R.id.navigation_account -> {
-//                    val intent = Intent(this@Home, Debt::class.java)
-//                    startActivity(intent)
+                    val intent = Intent(this@Home, DebtTrackerActivity::class.java)
+                    startActivity(intent)
                 }
             }
 

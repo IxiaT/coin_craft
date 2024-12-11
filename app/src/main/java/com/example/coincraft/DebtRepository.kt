@@ -12,7 +12,7 @@ class DebtRepository {
         .getReference("Users")
 
     // Create
-    fun addDebt(userId: String, debt: DebtModel, onComplete: (Boolean, String?) -> Unit) {
+    fun addDebt(userId: String, debt: DebtCardModel, onComplete: (Boolean, String?) -> Unit) {
         val debtRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Debts")
         debtRef.setValue(debt)
             .addOnSuccessListener { onComplete(true, null) }
@@ -20,13 +20,13 @@ class DebtRepository {
     }
 
     // Read
-    fun getAllDebts(userId: String, onComplete: (List<DebtModel>, String?) -> Unit) {
-        val debtRef = databaseReference.child(userId).child("Debt")
+    fun getAllDebts(userId: String, onComplete: (List<DebtCardModel>, String?) -> Unit) {
+        val debtRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Debts")
         debtRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val debtList = mutableListOf<DebtModel>()
+                val debtList = mutableListOf<DebtCardModel>()
                 for (debtSnapshot in snapshot.children) {
-                    val debt = debtSnapshot.getValue(DebtModel::class.java)
+                    val debt = debtSnapshot.getValue(DebtCardModel::class.java)
                     debt?.let { debtList.add(it) }
                 }
                 onComplete(debtList, null)
@@ -39,8 +39,8 @@ class DebtRepository {
     }
 
     // Update
-    fun updateDebt(userId: String, debtId: String, updatedDebt: DebtModel, onComplete: (Boolean, String?) -> Unit) {
-        val debtRef = databaseReference.child(userId).child("Debt").child(debtId)
+    fun updateDebt(userId: String, debtId: String, updatedDebt: DebtCardModel, onComplete: (Boolean, String?) -> Unit) {
+        val debtRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Debts")
         debtRef.setValue(updatedDebt)
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
@@ -48,7 +48,7 @@ class DebtRepository {
 
     // Delete
     fun deleteDebt(userId: String, debtId: String, onComplete: (Boolean, String?) -> Unit) {
-        val debtRef = databaseReference.child(userId).child("Debt").child(debtId)
+        val debtRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Debts")
         debtRef.removeValue()
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }

@@ -66,7 +66,6 @@ class EditDebtDialogFragment : DialogFragment() {
         adapterType = arguments?.getString("adapterType")
         position = arguments?.getInt("debtPosition", -1) ?: -1
 
-
         // Set initial values for the text fields
         debtOwnerTextView.text = debtOwner
         debtStatusTextView.text = debtStatus

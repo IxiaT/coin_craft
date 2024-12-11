@@ -7,10 +7,13 @@ class DebtViewModel : ViewModel() {
 
     // Add a debt
     fun addDebt(userId: String, debtCard: DebtCardModel, onComplete: (Boolean, String?) -> Unit) {
-        val debt = DebtCardModel( // Create a DebtModel instance from DebtCardModel
+        // Assuming DebtCardModel contains profileImage and coinImage as Int, we use them directly
+        val debt = DebtCardModel(
+            profileImage = debtCard.profileImage,
             name = debtCard.name,
-            amount = debtCard.amount,
             date = debtCard.date,
+            coinImage = debtCard.coinImage,
+            amount = debtCard.amount,
             state = debtCard.state
         )
         repository.addDebt(userId, debt, onComplete)
@@ -22,13 +25,13 @@ class DebtViewModel : ViewModel() {
             if (error != null) {
                 onComplete(emptyList(), error)
             } else {
-                // Convert DebtModel to DebtCardModel
+                // Map the debts to DebtCardModel
                 val debtCardModels = debts.map { debt ->
                     DebtCardModel(
-                        profileImage = R.drawable.avatar, // Add your image logic here
+                        profileImage = debt.profileImage,
                         name = debt.name,
                         date = debt.date,
-                        coinImage = R.drawable.coin, // Add your coin image logic here
+                        coinImage = debt.coinImage,
                         amount = debt.amount,
                         state = debt.state
                     )
@@ -40,10 +43,12 @@ class DebtViewModel : ViewModel() {
 
     // Update a debt
     fun updateDebt(userId: String, debtId: String, updatedDebtCard: DebtCardModel, onComplete: (Boolean, String?) -> Unit) {
-        val updatedDebt = DebtModel(
+        val updatedDebt = DebtCardModel(
+            profileImage = updatedDebtCard.profileImage,
             name = updatedDebtCard.name,
-            amount = updatedDebtCard.amount,
             date = updatedDebtCard.date,
+            coinImage = updatedDebtCard.coinImage,
+            amount = updatedDebtCard.amount,
             state = updatedDebtCard.state
         )
         repository.updateDebt(userId, debtId, updatedDebt, onComplete)
