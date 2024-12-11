@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GoalsAdapter(
     private val context: Context,
-    private val goals: MutableList<Goal>,
+    private val goals: MutableList<FinancialModel>,  // Use FinancialModel here
     private val fragmentManager: FragmentManager,
     private val updateBalanceListener: UpdateBalanceListener
 ) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
@@ -58,21 +58,21 @@ class GoalsAdapter(
 
     override fun getItemCount(): Int = goals.size
 
-    private fun openUpdateDialog(goal: Goal, position: Int) {
+    private fun openUpdateDialog(goal: FinancialModel, position: Int) {
         val updateDialog = UpdateGoalDialogFragment()
         updateDialog.setGoal(goal)
 
         // Use the setOnGoalUpdateListener method to handle updates
         updateDialog.setOnGoalUpdateListener(object : UpdateGoalDialogFragment.OnGoalUpdateListener {
-            override fun onGoalUpdated(updatedGoal: Goal) {
+            override fun onGoalUpdated(updatedGoal: FinancialModel) {
                 // Update the goal in the list at the correct position
                 goals[position] = updatedGoal
                 // Notify that specific item has changed
                 notifyItemChanged(position)
-                updateBalanceListener.onGoalUpdated() // Notify the parent activity of update
+                updateBalanceListener.onGoalUpdated(updatedGoal) // Notify the parent activity of update
             }
 
-            override fun onGoalDeleted(deletedGoal: Goal) {
+            override fun onGoalDeleted(deletedGoal: FinancialModel) {
                 // Find the position of the goal in the list and remove it
                 val positionToRemove = goals.indexOf(deletedGoal)
                 if (positionToRemove != -1) {
@@ -81,7 +81,7 @@ class GoalsAdapter(
                     notifyItemRemoved(positionToRemove)
                     // Adjust the rest of the list by notifying any item changes
                     notifyItemRangeChanged(positionToRemove, goals.size)
-                    updateBalanceListener.onGoalUpdated() // Notify the parent activity of update
+                    updateBalanceListener.onGoalDeleted(deletedGoal) // Notify the parent activity of delete
                 }
             }
         })
@@ -92,7 +92,8 @@ class GoalsAdapter(
 
     // Interface to notify updates
     interface UpdateBalanceListener {
-        fun onGoalUpdated()
+        fun onGoalUpdated(updatedGoal: FinancialModel)
+        fun onGoalDeleted(goal: FinancialModel)
     }
 
     class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
