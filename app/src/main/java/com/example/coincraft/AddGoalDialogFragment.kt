@@ -7,6 +7,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -80,25 +81,33 @@ class AddGoalDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // Map the selected goal type to its drawable resource
-            val goalIcon = goalTypeToDrawableMap[goalType] ?: R.drawable.ic_others // Default to "Other" if not found
-
-            // Pass the data back to the activity, including the goal date in yyyy-MM-dd format
+            val goalIcon = goalTypeToDrawableMap[goalType] ?: R.drawable.ic_others
             val formattedDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).parse(deadline)?.let {
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it)
             } ?: SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-            goalSaveListener?.onGoalSaved(
-                Goal(
-                    name = goalName,
-                    icon = goalIcon, // Pass the drawable resource ID
-                    saved = 0.0, // Initially no savings
-                    target = goalAmount.toDouble(),
-                    date = formattedDate // Pass the date in yyyy-MM-dd format
-                )
+            val newGoal = FinancialModel(
+                name = goalName,
+                icon = goalIcon,
+                saved = 0.0,
+                target = goalAmount.toDouble(),
+                date = formattedDate
             )
-            dismiss() // Dismiss the dialog when done
+
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
+            val repository = FinancialRepository()
+
+            repository.addFinancialGoal(userId, newGoal) { success, error ->
+                if (success) {
+                    // Assign the retrieved key to the new goal and refresh the list
+                    goalSaveListener?.onGoalSaved(newGoal)
+                    dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to save goal: ${error ?: "Unknown error"}", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+
 
         // Create the dialog and return it
         return android.app.AlertDialog.Builder(requireActivity())
@@ -112,6 +121,6 @@ class AddGoalDialogFragment : DialogFragment() {
 
     // Interface for saving goal data
     interface GoalSaveListener {
-        fun onGoalSaved(newGoal: Goal)
+        fun onGoalSaved(newGoal: FinancialModel)
     }
 }
