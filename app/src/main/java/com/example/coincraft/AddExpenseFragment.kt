@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -177,10 +178,10 @@ class AddExpenseFragment: DialogFragment() {
                     return
                 }
 
-                val income = IncomeModel(
+                val income = TransactionModel(
                     amount = amount,
                     category = category,
-                    incomeNote = note,
+                    note = note,
                     date = date
                 )
 
@@ -200,19 +201,19 @@ class AddExpenseFragment: DialogFragment() {
                     return
                 }
 
-                val expense = ExpenseModel(
+                val expense = TransactionModel(
                     amount = amount,
                     category = category,
-                    expenseNote = note,
+                    note = note,
                     date = date
                 )
 
                 expenseViewModel.addExpense(userId, expense) { success, error ->
                     if (success) {
-                        Toast.makeText(requireContext(), "Expense added successfully", Toast.LENGTH_SHORT).show()
+                        Log.d("AddExpense", "Expense added")
                         dismiss()
                     } else {
-                        Toast.makeText(requireContext(), "Failed to add expense: $error", Toast.LENGTH_SHORT).show()
+                        Log.d("AddExpense", "Failed to add expense: $error")
                     }
                 }
             }

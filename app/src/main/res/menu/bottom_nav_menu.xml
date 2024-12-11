@@ -6,17 +6,17 @@
         android:title="@string/home" />
 
     <item
-        android:id="@+id/navigation_discover"
+        android:id="@+id/navigation_transaction"
         android:icon="@drawable/transaction"
         android:title="@string/transaction" />
 
     <item
-        android:id="@+id/navigation_likes"
+        android:id="@+id/navigation_budgeting"
         android:icon="@drawable/savings"
         android:title="@string/budgeting" />
 
     <item
-        android:id="@+id/navigation_account"
+        android:id="@+id/navigation_debt"
         android:icon="@drawable/debt"
         android:title="@string/debt" />
 </menu>

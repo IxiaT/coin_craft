@@ -29,6 +29,7 @@ class Home : AppCompatActivity() {
     private lateinit var financialViewModel: FinancialViewModel
     private lateinit var expenseViewModel: ExpenseViewModel
     private lateinit var incomeViewModel: IncomeViewModel
+    private lateinit var budgetViewModel: BudgetViewModel
     private lateinit var userId: String
 
     private lateinit var hpBar: ProgressBar
@@ -75,6 +76,7 @@ class Home : AppCompatActivity() {
         expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
         financialViewModel = ViewModelProvider(this)[FinancialViewModel::class.java]
         incomeViewModel = ViewModelProvider(this)[IncomeViewModel::class.java]
+        budgetViewModel = ViewModelProvider(this)[BudgetViewModel::class.java]
        
         //Recycler view
         fetchFinancialGoals()
@@ -105,6 +107,9 @@ class Home : AppCompatActivity() {
             showLogoutDialog()
         }
 
+        val budget = BudgetModel(
+
+        )
 
         // Change intent to your respective activities
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -119,15 +124,15 @@ class Home : AppCompatActivity() {
                         finish()
                     }
                 }
-                R.id.navigation_discover -> {
-//                    intent = Intent(this@Home, Transaction::class.java)
-//                    startActivity(intent)
+                R.id.navigation_transaction -> {
+                    intent = Intent(this@Home, Transaction::class.java)
+                    startActivity(intent)
                 }
-                R.id.navigation_likes -> {
+                R.id.navigation_budgeting -> {
 //                    intent = Intent(this@Home, Budgeting::class.java)
 //                    startActivity(intent)
                 }
-                R.id.navigation_account -> {
+                R.id.navigation_debt -> {
 //                    val intent = Intent(this@Home, Debt::class.java)
 //                    startActivity(intent)
                 }
@@ -203,20 +208,6 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun fetchExpenses() {
-        expenseViewModel.getTotalExpenses(userId) { totalSpent, error ->
-            if (error == null) {
-                // Successfully retrieved expenses
-                Log.d("ExpensesActivity", "Expenses: $totalSpent")
-                spentAmount.text = totalSpent.toString()
-            } else {
-                // Handle error
-                Log.e("ExpensesActivity", "Error fetching expenses: $error")
-                Toast.makeText(this, "Error fetching expenses", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun calculatePercentage() {
         expenseViewModel.getTotalExpenses(userId) { totalExpenses, expenseError ->
             if (expenseError != null) {
@@ -242,8 +233,17 @@ class Home : AppCompatActivity() {
                 val balance = totalIncome - totalExpenses
 
                 balanceText.text = balance.toString()
-                spentBar.setProgress(spentPercentage.toInt(), true)
-                earnedBar.setProgress(earnedPercentage.toInt(), true)
+
+                if (totalIncome.equals(0.00)) {
+                    earnedBar.setProgress(0, true)
+                } else {
+                    earnedBar.setProgress(earnedPercentage.toInt(), true)
+                }
+                if (totalExpenses.equals(0.00)) {
+                    spentBar.setProgress(0, true)
+                } else {
+                    spentBar.setProgress(spentPercentage.toInt(), true)
+                }
             }
         }
     }
@@ -280,7 +280,5 @@ class Home : AppCompatActivity() {
         spentBar.setProgress(spentPercentage.toInt(), true)
         earnedBar.setProgress(earnedPercentage.toInt(), true)
     }
-
-
 
 }
