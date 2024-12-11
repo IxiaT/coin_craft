@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class ExpenseAdapter (
     private val context: Context,
-    private val expenseList: List<ExpenseModel>
+    private val expenseList: List<TransactionModel>
 ) : RecyclerView.Adapter<ExpenseAdapter.CardViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
