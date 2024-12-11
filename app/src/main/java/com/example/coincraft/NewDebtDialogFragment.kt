@@ -1,5 +1,6 @@
 package com.example.coincraft
 
+import DebtViewModel
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.coincraft.R
 import java.util.*
 
@@ -17,6 +19,7 @@ class NewDebtDialogFragment : DialogFragment() {
     interface OnDebtAddedListener {
         fun onDebtAdded(amount: String, name: String, date: String, state: String)
     }
+
     private lateinit var toReceiveButton: ImageButton
     private lateinit var toPayButton: ImageButton
     private lateinit var amountEditText: EditText
@@ -26,7 +29,9 @@ class NewDebtDialogFragment : DialogFragment() {
     private lateinit var closeButton: ImageButton
 
     private var isToReceiveActive = false // Default state
-    private var isToPayActive = false   // Default state
+    private var isToPayActive = false    // Default state
+
+    private lateinit var viewModel: DebtViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
@@ -44,11 +49,15 @@ class NewDebtDialogFragment : DialogFragment() {
         addButton = dialogView.findViewById(R.id.imageButton5)
         closeButton = dialogView.findViewById(R.id.closebtn)
 
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(requireActivity()).get(DebtViewModel::class.java)
+
         // Set up DatePicker on the EditText field
         dateEditText.setOnClickListener {
             showDatePickerDialog()
         }
 
+        // Handle "To Receive" Button click
         toReceiveButton.setOnClickListener {
             if (!isToReceiveActive) {
                 isToReceiveActive = true
@@ -57,6 +66,7 @@ class NewDebtDialogFragment : DialogFragment() {
             }
         }
 
+        // Handle "To Pay" Button click
         toPayButton.setOnClickListener {
             if (!isToPayActive) {
                 isToReceiveActive = false
@@ -91,19 +101,39 @@ class NewDebtDialogFragment : DialogFragment() {
                         else -> null
                     }
                     if (state != null) {
-                        (activity as? OnDebtAddedListener)?.onDebtAdded(
-                            amount.toString(), // Send as a String or Double based on your requirement
-                            name,
-                            date,
-                            state
+                        // Create DebtCardModel
+                        val debt = DebtCardModel(
+                            id = generateUniqueId(), // You can implement your own logic for generating unique IDs
+                            profileImage = R.drawable.avatar, // Example, replace with actual image resource
+                            name = name,
+                            date = date,
+                            coinImage = R.drawable.coin, // Example, replace with actual image resource
+                            amount = amount.toString(),
+                            state = state
                         )
-                        dismiss() // Close the dialog
+                        // Pass the individual fields to onDebtAdded
+                        (activity as? OnDebtAddedListener)?.onDebtAdded(
+                            debt.amount,
+                            debt.name,
+                            debt.date,
+                            debt.state
+                        )
+
+                        // Call ViewModel's addDebt method
+                        val userId = "user_id_example" // Replace with actual user ID
+                        viewModel.addDebt(userId, debt) { success, message ->
+                            if (success) {
+                                dismiss()
+                            } else {
+                                // Handle error (e.g., show a message)
+                            }
+                        }
                     }
                 }
             }
         }
 
-        // Handle Close Button Click
+        // Handle Close Button click
         closeButton.setOnClickListener {
             dismiss() // Close the dialog
         }
@@ -144,6 +174,12 @@ class NewDebtDialogFragment : DialogFragment() {
 
         datePickerDialog.show()
     }
+
+    private fun generateUniqueId(): String {
+        // Generate a unique ID for the debt, for example, by using Firebase's push method or any other strategy
+        return UUID.randomUUID().toString() // You can replace this with your own logic
+    }
+
     private fun isPositiveNumber(str: String): Boolean {
         return try {
             val number = str.toDouble()
@@ -152,5 +188,4 @@ class NewDebtDialogFragment : DialogFragment() {
             false // Return false if it's not a valid number
         }
     }
-
 }

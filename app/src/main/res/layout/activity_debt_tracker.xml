@@ -42,8 +42,7 @@
             android:fontFamily="@font/silkscreen_bold"
             android:gravity="start|center_vertical"
             android:lineSpacingExtra="8sp"
-            android:text="@string/topbartxt"
-            android:textAppearance="@style/topbartxt"
+            android:text="Debt Tracker"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -86,7 +85,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rview_yourdebts"
         android:layout_width="409dp"
-        android:layout_height="225dp"
+        android:layout_height="220dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,10 +98,24 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/botnav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rview_yourdebts"
         app:srcCompat="@drawable/newbtn" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/botnav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="30dp"
+        app:backgroundTint="@color/white"
+        app:itemIconTint="@color/yellow_primary"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

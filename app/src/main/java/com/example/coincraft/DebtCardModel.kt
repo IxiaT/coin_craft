@@ -1,10 +1,16 @@
 package com.example.coincraft
 
+import java.util.UUID
+
 data class DebtCardModel(
-    val profileImage: Int,
-    var name: String,
-    var date: String,
-    val coinImage: Int,
-    var amount: String,
-    var state: String
-)
+    var id: String = "",
+    var profileImage: Int = 0,
+    var name: String = "",
+    var date: String = "",
+    var coinImage: Int = 0,
+    var amount: String = "",
+    var state: String = ""
+) {
+    // No-argument constructor for Firebase deserialization
+    constructor() : this("", 0, "", "", 0, "", "")
+}
