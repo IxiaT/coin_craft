@@ -26,6 +26,8 @@ class BudgetingActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_budgeting)
 
+
+        /*
         editTotalBudget = findViewById(R.id.bseditbtn)
 
 
@@ -51,6 +53,7 @@ class BudgetingActivity : AppCompatActivity() {
 
         WantsDataList = arrayListOf<NeedWantDataClass>()
         getWantsData()
+         */
 
     }
 
