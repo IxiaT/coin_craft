@@ -10,7 +10,7 @@ class FinancialRepository {
 
     // Add Financial Goal with Firebase-generated ID
     fun addFinancialGoal(userId: String, goal: FinancialModel, callback: (Boolean, String?) -> Unit) {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId).child("goals")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("FinancialGoals")
         val newGoalRef = databaseReference.push() // Generate a unique key
         val key = newGoalRef.key // Retrieve the key
 
