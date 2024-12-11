@@ -4,34 +4,38 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.firebase.auth.FirebaseAuth
 
-class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, GoalsAdapter.UpdateBalanceListener {
+class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, FinancialGoalsAdapter.UpdateBalanceListener, UpdateGoalDialogFragment.OnGoalUpdateListener {
 
     private lateinit var goalsRecyclerView: RecyclerView
-    private lateinit var goalsAdapter: GoalsAdapter
-    private lateinit var goalList: MutableList<Goal>
+    private lateinit var financialGoalsAdapter: FinancialGoalsAdapter
+    private lateinit var goalList: MutableList<FinancialModel>  // Use FinancialModel here
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
     private lateinit var backBtn: ImageButton
-    private lateinit var financialViewModel: FinancialViewModel
     private var savedBalance: Double = 0.0
     private var plannedBalance: Double = 0.0
-
     private lateinit var progressIndicator: CircularProgressIndicator
     private lateinit var progressTextView: TextView
+
+    private lateinit var financialRepository: FinancialRepository
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_financial_goals)
+
+        // Initialize Firebase and repository
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        userId = currentUser?.uid ?: ""
+        financialRepository = FinancialRepository()
 
         // Initialize views
         val addGoalBtn: ImageButton = findViewById(R.id.addgoalbtn)
@@ -57,33 +61,61 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         goalsRecyclerView = findViewById(R.id.goalsRecyclerView)
         goalsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Initialize goal data
-        goalList = mutableListOf(
-            Goal("Mother's Day", R.drawable.ic_holiday, 1000.0, 1000.0, "2024-12-08"),
-            Goal("Boracay", R.drawable.ic_destination, 1500.0, 3000.0, "2024-12-08"),
-            Goal("iPhone 16", R.drawable.ic_gadget, 7500.0, 30000.0, "2024-12-08"),
-            Goal("Shoes", R.drawable.ic_shoes, 3250.0, 5000.0, "2024-12-08")
-        )
-
-        // Set up adapter with FragmentManager and listener
-        goalsAdapter = GoalsAdapter(this, goalList, supportFragmentManager, this)
-        goalsRecyclerView.adapter = goalsAdapter
+        // Fetch the goals data from Firebase
+        fetchFinancialGoals()
 
         // Initialize balance values and listeners
         setupBalanceListeners()
-        updateOverallBalance()
     }
 
-    override fun onGoalSaved(newGoal: Goal) {
+    private fun fetchFinancialGoals() {
+        // Fetch data from the repository (Firebase)
+        financialRepository.getFinancialGoals(userId) { financialGoals, error ->
+            if (error == null) {
+                // If no error, update the goal list and refresh the adapter
+                goalList = financialGoals.toMutableList()
+                financialGoalsAdapter = FinancialGoalsAdapter(this, goalList, supportFragmentManager, this)
+                goalsRecyclerView.adapter = financialGoalsAdapter
+                updateOverallBalance()
+            } else {
+                // If there was an error, show a toast message
+                Toast.makeText(this, "Failed to fetch goals: $error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onGoalSaved(newGoal: FinancialModel) {
+        // Add the goal to the local list and update the RecyclerView
         goalList.add(newGoal)
-        goalsAdapter.notifyItemInserted(goalList.size - 1)
+        financialGoalsAdapter.notifyItemInserted(goalList.size - 1)
         Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
         updateOverallBalance()
     }
 
-    override fun onGoalUpdated() {
-        // Called when a goal is updated in the adapter
-        updateOverallBalance()
+    override fun onGoalUpdated(updatedGoal: FinancialModel) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        // Calling the repository to update the goal in Firebase
+        financialRepository.updateFinancialGoal(userId, updatedGoal.key ?: return, updatedGoal) { success, errorMessage ->
+            if (success) {
+                fetchFinancialGoals()  // Reload the updated list of goals
+                Toast.makeText(this, "Goal updated", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to update goal: $errorMessage", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onGoalDeleted(goal: FinancialModel) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        // Calling the repository to delete the goal in Firebase
+        financialRepository.deleteFinancialGoal(userId, goal.key ?: return) { success, errorMessage ->
+            if (success) {
+                goalList.remove(goal)  // Remove the goal from the local list
+                Toast.makeText(this, "Goal deleted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to delete goal: $errorMessage", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupBalanceListeners() {
