@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 
-class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, GoalsAdapter.UpdateBalanceListener, UpdateGoalDialogFragment.OnGoalUpdateListener {
+class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, FinancialGoalsAdapter.UpdateBalanceListener, UpdateGoalDialogFragment.OnGoalUpdateListener {
 
     private lateinit var goalsRecyclerView: RecyclerView
-    private lateinit var goalsAdapter: GoalsAdapter
+    private lateinit var financialGoalsAdapter: FinancialGoalsAdapter
     private lateinit var goalList: MutableList<FinancialModel>  // Use FinancialModel here
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
@@ -74,8 +74,8 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
             if (error == null) {
                 // If no error, update the goal list and refresh the adapter
                 goalList = financialGoals.toMutableList()
-                goalsAdapter = GoalsAdapter(this, goalList, supportFragmentManager, this)
-                goalsRecyclerView.adapter = goalsAdapter
+                financialGoalsAdapter = FinancialGoalsAdapter(this, goalList, supportFragmentManager, this)
+                goalsRecyclerView.adapter = financialGoalsAdapter
                 updateOverallBalance()
             } else {
                 // If there was an error, show a toast message
@@ -85,17 +85,11 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     }
 
     override fun onGoalSaved(newGoal: FinancialModel) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        financialRepository.addFinancialGoal(userId, newGoal) { success, errorMessage ->
-            if (success) {
-                goalList.add(newGoal)
-                goalsAdapter.notifyItemInserted(goalList.size - 1)
-                Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
-                updateOverallBalance()
-            } else {
-                Toast.makeText(this, "Failed to add goal: $errorMessage", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Add the goal to the local list and update the RecyclerView
+        goalList.add(newGoal)
+        financialGoalsAdapter.notifyItemInserted(goalList.size - 1)
+        Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
+        updateOverallBalance()
     }
 
     override fun onGoalUpdated(updatedGoal: FinancialModel) {
