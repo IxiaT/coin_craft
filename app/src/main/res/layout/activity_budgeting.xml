@@ -14,7 +14,8 @@
         android:id="@+id/topbudgetbar"
         android:layout_width="0dp"
         android:layout_height="65dp"
-        android:background="@color/primary_yellow"
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorText"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/monthly_area"
@@ -85,8 +86,15 @@
             app:srcCompat="@drawable/forwardbtn" />
     </LinearLayout>
 
-
-
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/budgetmainfragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthly_area" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -124,8 +124,8 @@ class Home : AppCompatActivity() {
 //                    startActivity(intent)
                 }
                 R.id.navigation_likes -> {
-//                    intent = Intent(this@Home, BudgetingActivity::class.java)
-//                    startActivity(intent)
+                    intent = Intent(this@Home, BudgetingActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.navigation_account -> {
 //                    val intent = Intent(this@Home, Debt::class.java)
