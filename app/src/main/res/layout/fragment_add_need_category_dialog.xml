@@ -55,7 +55,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/txtamount"
+                    android:id="@+id/txtneedname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

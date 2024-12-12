@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/silkscreen"
                 android:text="ADD WANTS BUDGET"
-                android:textSize="20dp" />
+                android:textSize="18dp" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -55,7 +55,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/txtamount"
+                    android:id="@+id/txtwantname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

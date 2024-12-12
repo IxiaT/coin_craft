@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class BudgetingMainFragment : Fragment() {
 
+    private lateinit var needsAdapter: NeedsAdapter
+
     private lateinit var NeedsRecyclerView: RecyclerView
     private lateinit var NeedsDataList: ArrayList<NeedWantDataClass>
     lateinit var NeedsCategory: Array<String>
@@ -30,6 +32,7 @@ class BudgetingMainFragment : Fragment() {
         val addNeedCategoryButton = view.findViewById<ImageButton>(R.id.needaddbtn)
         addNeedCategoryButton.setOnClickListener {
             val needDialogFragment = AddNeedCategoryDialogFragment()
+            //needDialogFragment.listener = this
             needDialogFragment.show(childFragmentManager, "addNeedCategoryDialog")
         }
 
@@ -39,8 +42,16 @@ class BudgetingMainFragment : Fragment() {
             wantDialogFragment.show(childFragmentManager, "addWantCategoryDialog")
         }
 
+        NeedsDataList = arrayListOf()
+        needsAdapter = NeedsAdapter(NeedsDataList)
+
+        NeedsRecyclerView = view.findViewById(R.id.needsrecyclerview)
+        NeedsRecyclerView.layoutManager = LinearLayoutManager(context)
+        NeedsRecyclerView.setHasFixedSize(true)
+        NeedsRecyclerView.adapter = needsAdapter
+
         NeedsCategory = arrayOf(
-            "Education", "Food", "Groceries", "Laundry", "Medical", "Payment", "Phone", "Rent", "Tax", "Transportation", "Utilities"
+            "Food", "Rent", "Transportation"
         )
 
         NeedsRecyclerView = view.findViewById(R.id.needsrecyclerview)
@@ -64,6 +75,14 @@ class BudgetingMainFragment : Fragment() {
 
         return view
     }
+
+    /*
+    override fun onNeedCategoryAdded(categoryName: String) {
+        val newNeed = NeedWantDataClass(categoryName)
+        NeedsDataList.add(newNeed)
+        needsAdapter.notifyItemInserted(NeedsDataList.size - 1)
+    }
+     */
 
     private fun getNeedsData(){
         for (i in NeedsCategory.indices){
