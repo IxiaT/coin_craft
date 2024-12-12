@@ -27,24 +27,20 @@ class HomeGoalsAdapter (
 
         // Set the goal type, name, and other properties from the FinancialModel
         holder.goalType.text = model.name  // Assuming `goalType` is related to the `name`
-        holder.goalName.text = model.name  // Goal name (model name)
 
         // Use `getFormattedDateForDisplay()` for formatted date display
-        holder.goalDeadline.text = model.getFormattedDateForDisplay()
+        holder.goalDeadline.text = model.getFormattedDateForDialog()
 
         // Update progress information
-        holder.goalProgress.text = "${model.saved} / ${model.target} - ${model.percentage}%"
-
-        // Optionally, update other UI elements based on the FinancialModel properties
+        holder.goalProgress.text = "${model.saved}/${model.target}"
+        holder.goalPercentage.text = "${model.percentage}%"
     }
 
 
     class HomeGoalsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val goalName = itemView.findViewById<TextView>(R.id.goal_name)
         val goalDeadline = itemView.findViewById<TextView>(R.id.goal_deadline)
         val goalProgress = itemView.findViewById<TextView>(R.id.goal_progress)
         val goalType = itemView.findViewById<TextView>(R.id.goal_type)
-
-
+        val goalPercentage = itemView.findViewById<TextView>(R.id.goal_percent)
     }
 }

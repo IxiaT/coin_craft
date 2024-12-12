@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/transaction_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="5dp"
+        android:contentDescription="Item Icon"
+        android:src="@drawable/balance"
+        android:layout_marginEnd="16dp" />
+
+    <TextView
+        android:id="@+id/transaction_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Gold Earned"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:fontFamily="@font/silkscreen_regular"
+        android:maxLines="1"
+        android:gravity="center_vertical" />
+
+    <ImageView
+        android:id="@+id/editIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/edit"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="Edit Icon"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/transaction_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₱1000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/silkscreen_regular"
+        android:textColor="@android:color/holo_green_dark"
+        android:gravity="center_vertical" />
+</LinearLayout>

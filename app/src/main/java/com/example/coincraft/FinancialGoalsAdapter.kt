@@ -9,12 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
-class GoalsAdapter(
+class FinancialGoalsAdapter(
     private val context: Context,
     private val goals: MutableList<FinancialModel>,  // Use FinancialModel here
     private val fragmentManager: FragmentManager,
     private val updateBalanceListener: UpdateBalanceListener
-) : RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
+) : RecyclerView.Adapter<FinancialGoalsAdapter.GoalViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.goal_item, parent, false)
