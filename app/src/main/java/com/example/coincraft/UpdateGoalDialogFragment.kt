@@ -179,3 +179,4 @@ class UpdateGoalDialogFragment : DialogFragment() {
         fun onGoalDeleted(goal: FinancialModel)
     }
 }
+

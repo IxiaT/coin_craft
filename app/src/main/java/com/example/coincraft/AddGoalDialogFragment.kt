@@ -101,3 +101,4 @@ class AddGoalDialogFragment : DialogFragment() {
         fun onGoalSaved(newGoal: FinancialModel)
     }
 }
+
