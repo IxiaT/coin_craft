@@ -92,8 +92,9 @@ class Transaction : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            val back = Intent(this@Transaction, Home::class.java)
-            startActivity(back)
+            intent = Intent(this@Transaction, Home::class.java)
+            startActivity(intent)
+            finish()
         }
 
         expenseViewModel.transactionUpdated.observe(this) { updated ->

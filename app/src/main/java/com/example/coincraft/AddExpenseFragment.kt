@@ -65,7 +65,7 @@ class AddExpenseFragment: DialogFragment() {
             expenseViewModel = ViewModelProvider(requireActivity())[ExpenseViewModel::class.java]
             incomeViewModel = ViewModelProvider(requireActivity())[IncomeViewModel::class.java]
             dateEditText.inputType = 0
-            dateEditText.setText(SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(calendar.time))
+            dateEditText.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time))
 
             // Set up DatePickerDialog
             dateEditText.setOnClickListener {
@@ -73,7 +73,7 @@ class AddExpenseFragment: DialogFragment() {
                     requireContext(),
                     { _, year, month, dayOfMonth ->
                         calendar.set(year, month, dayOfMonth)
-                        val dateFormat = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
+                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                         dateEditText.setText(dateFormat.format(calendar.time))
                     },
                     calendar.get(Calendar.YEAR),
@@ -173,6 +173,7 @@ class AddExpenseFragment: DialogFragment() {
                 incomeViewModel.addIncome(userId, income) { success, error ->
                     if (success) {
                         Toast.makeText(requireContext(), "Income added successfully", Toast.LENGTH_SHORT).show()
+                        incomeViewModel.transactionUpdated.postValue(true)
                         dismiss()
                     } else {
                         Toast.makeText(requireContext(), "Failed to add income: $error", Toast.LENGTH_SHORT).show()
@@ -183,6 +184,7 @@ class AddExpenseFragment: DialogFragment() {
                 val amount = amountText.toDoubleOrNull()
                 if (amount == null || amount <= 0) {
                     Toast.makeText(requireContext(), "Please enter a valid amount", Toast.LENGTH_SHORT).show()
+                    expenseViewModel.transactionUpdated.postValue(true)
                     return
                 }
 

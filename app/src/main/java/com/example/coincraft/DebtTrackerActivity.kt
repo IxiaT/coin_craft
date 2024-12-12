@@ -53,6 +53,8 @@ class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAdd
             return
         }
 
+        bottomNav.selectedItemId = R.id.navigation_debt
+
         bottomNav.setOnNavigationItemSelectedListener { item ->
             val itemId = item.itemId
             var intent: Intent? = null
@@ -63,16 +65,15 @@ class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAdd
                     startActivity(intent)
                 }
                 R.id.navigation_transaction -> {
-//                    intent = Intent(this@Home, Transaction::class.java)
-//                    startActivity(intent)
+                    intent = Intent(this@DebtTrackerActivity, Transaction::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                 R.id.navigation_budgeting -> {
 //                    intent = Intent(this@Home, Budgeting::class.java)
 //                    startActivity(intent)
                 }
                 R.id.navigation_debt -> {
-
-
                     if (this@DebtTrackerActivity !is DebtTrackerActivity) {
                         intent = Intent(this@DebtTrackerActivity, DebtTrackerActivity::class.java)
                         startActivity(intent)
