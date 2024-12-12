@@ -40,6 +40,9 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         userId = currentUser?.uid ?: ""
         financialRepository = FinancialRepository()
 
+        // Initialize goalList to avoid the UninitializedPropertyAccessException
+        goalList = mutableListOf()  // Initialize as an empty list
+
         // Initialize views
         val addGoalBtn: ImageButton = findViewById(R.id.addgoalbtn)
         savedBalanceEdit = findViewById(R.id.saved_balance_edit)
@@ -90,6 +93,9 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
                 val ongoingGoalsList = financialGoals.filter { it.state == false }.toMutableList()
                 val completedGoalsList = financialGoals.filter { it.state == true }.toMutableList()
 
+                // Update the goalList with ongoing goals data
+                goalList = ongoingGoalsList
+
                 // Set up adapters for both RecyclerViews
                 ongoingGoalsAdapter = FinancialGoalsAdapter(this, ongoingGoalsList, supportFragmentManager, this)
                 completedGoalsAdapter = FinancialGoalsAdapter(this, completedGoalsList, supportFragmentManager, this)
@@ -105,6 +111,7 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
             }
         }
     }
+
 
     // Switch between ongoing and completed RecyclerViews
     private fun toggleRecyclerViews() {
