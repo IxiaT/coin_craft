@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,20 @@ class BudgetingMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view =  inflater.inflate(R.layout.fragment_budgeting_main, container, false)
+
+        val addNeedCategoryButton = view.findViewById<ImageButton>(R.id.needaddbtn)
+        addNeedCategoryButton.setOnClickListener {
+            val needDialogFragment = AddNeedCategoryDialogFragment()
+            needDialogFragment.show(childFragmentManager, "addNeedCategoryDialog")
+        }
+
+        val addWantCategoryButton = view.findViewById<ImageButton>(R.id.wantaddbtn)
+        addWantCategoryButton.setOnClickListener{
+            val wantDialogFragment = AddWantCategoryDialogFragment()
+            wantDialogFragment.show(childFragmentManager, "addWantCategoryDialog")
+        }
 
         NeedsCategory = arrayOf(
             "Education", "Food", "Groceries", "Laundry", "Medical", "Payment", "Phone", "Rent", "Tax", "Transportation", "Utilities"
