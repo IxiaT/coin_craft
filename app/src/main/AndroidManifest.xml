@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoinCraft"
         tools:targetApi="31">
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
         <!-- MainActivity (Launcher Activity) -->
         <activity
             android:name=".LoginActivity"
@@ -40,10 +37,15 @@
         <activity
             android:name=".DebtTrackerActivity"
             android:exported="false" />
-
-        <activity android:name=".BudgetingActivity"
+        <activity
+            android:name=".Transaction"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BudgetingActivity"
             android:exported="false"/>
-
     </application>
 
 </manifest>
