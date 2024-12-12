@@ -1,17 +1,19 @@
 package com.example.coincraft
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ExpenseViewModel : ViewModel() {
     private val repository = ExpenseRepository()
+    val transactionUpdated = MutableLiveData<Boolean>()
 
     // Add an expense
-    fun addExpense(userId: String, expense: ExpenseModel, onComplete: (Boolean, String?) -> Unit) {
+    fun addExpense(userId: String, expense: TransactionModel, onComplete: (Boolean, String?) -> Unit) {
         repository.addExpense(userId, expense, onComplete)
     }
 
     // Retrieve all expenses
-    fun getAllExpenses(userId: String, onComplete: (List<ExpenseModel>, String?) -> Unit) {
+    fun getAllExpenses(userId: String, onComplete: (List<TransactionModel>, String?) -> Unit) {
         repository.getAllExpenses(userId, onComplete)
     }
 
@@ -19,7 +21,7 @@ class ExpenseViewModel : ViewModel() {
     fun updateExpense(
         userId: String,
         expenseID: String,
-        updatedExpense: ExpenseModel,
+        updatedExpense: TransactionModel,
         onComplete: (Boolean, String?) -> Unit
     ) {
         repository.updateExpense(userId, expenseID, updatedExpense, onComplete)
@@ -36,5 +38,9 @@ class ExpenseViewModel : ViewModel() {
 
     fun observeTotalExpenses(userId: String, onUpdate: (Double) -> Unit) {
         repository.observeTotalExpenses(userId, onUpdate)
+    }
+
+    fun getExpensesByMonth(userId: String, selectedMonth: Int, onComplete: (MutableList<TransactionModel>, String?) -> Unit) {
+        repository.getExpensesByMonth(userId, selectedMonth,onComplete)
     }
 }
