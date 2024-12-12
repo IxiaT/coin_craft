@@ -12,38 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoinCraft"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
         <!-- MainActivity (Launcher Activity) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- RegisterActivity -->
+        </activity> <!-- RegisterActivity -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-
         <activity
             android:name=".Home"
             android:exported="false" />
-
-        <activity android:name=".ExpenseTracker"
+        <activity
+            android:name=".ExpenseTracker"
+            android:exported="false" />
+        <activity
+            android:name=".FinancialGoalsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DebtTrackerActivity"
             android:exported="false" />
 
-        <activity android:name=".Transaction"
-            android:exported="false" />
-
-        <activity android:name=".FinancialGoalsActivity"
-            android:exported="false" />
-
-        <activity android:name=".DebtTrackerActivity"
-            android:exported="false" />
-
+        <activity android:name=".BudgetingActivity"
+            android:exported="false"/>
 
     </application>
 
