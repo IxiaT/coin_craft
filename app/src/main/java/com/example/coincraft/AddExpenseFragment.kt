@@ -65,6 +65,7 @@ class AddExpenseFragment: DialogFragment() {
             expenseViewModel = ViewModelProvider(requireActivity())[ExpenseViewModel::class.java]
             incomeViewModel = ViewModelProvider(requireActivity())[IncomeViewModel::class.java]
             dateEditText.inputType = 0
+            dateEditText.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time))
 
             // Set up DatePickerDialog
             dateEditText.setOnClickListener {
@@ -80,22 +81,6 @@ class AddExpenseFragment: DialogFragment() {
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
-
-            // Set up TimePickerDialog
-//        timeEditText.setOnClickListener {
-//            TimePickerDialog(
-//                requireContext(),
-//                { _, hour, minute ->
-//                    calendar.set(Calendar.HOUR_OF_DAY, hour)
-//                    calendar.set(Calendar.MINUTE, minute)
-//                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-//                    timeEditText.setText(timeFormat.format(calendar.time))
-//                },
-//                calendar.get(Calendar.HOUR_OF_DAY),
-//                calendar.get(Calendar.MINUTE),
-//                true
-//            ).show()
-//        }
             incomeButton.setOnClickListener {
                 setActiveButton("MONEY_IN")
             }
@@ -188,6 +173,7 @@ class AddExpenseFragment: DialogFragment() {
                 incomeViewModel.addIncome(userId, income) { success, error ->
                     if (success) {
                         Toast.makeText(requireContext(), "Income added successfully", Toast.LENGTH_SHORT).show()
+                        incomeViewModel.transactionUpdated.postValue(true)
                         dismiss()
                     } else {
                         Toast.makeText(requireContext(), "Failed to add income: $error", Toast.LENGTH_SHORT).show()
@@ -198,6 +184,7 @@ class AddExpenseFragment: DialogFragment() {
                 val amount = amountText.toDoubleOrNull()
                 if (amount == null || amount <= 0) {
                     Toast.makeText(requireContext(), "Please enter a valid amount", Toast.LENGTH_SHORT).show()
+                    expenseViewModel.transactionUpdated.postValue(true)
                     return
                 }
 
