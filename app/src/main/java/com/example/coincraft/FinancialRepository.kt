@@ -15,7 +15,7 @@ class FinancialRepository {
         val key = newGoalRef.key // Retrieve the key
 
         if (key != null) {
-            goal.key = key // Assign the key to the goal object
+            goal.id = key // Assign the key to the goal object
             newGoalRef.setValue(goal)
                 .addOnSuccessListener {
                     callback(true, null)
@@ -38,7 +38,7 @@ class FinancialRepository {
                     val financialGoal = goalSnapshot.getValue(FinancialModel::class.java)
                     // Attach the Firebase key as a property on the model (temporary)
                     financialGoal?.let {
-                        it.key = goalSnapshot.key // Get the Firebase-generated key
+                        it.id = goalSnapshot.key // Get the Firebase-generated key
                         financialList.add(it)
                     }
                 }

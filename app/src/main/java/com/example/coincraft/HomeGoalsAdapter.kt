@@ -29,7 +29,7 @@ class HomeGoalsAdapter (
         holder.goalType.text = model.name  // Assuming `goalType` is related to the `name`
 
         // Use `getFormattedDateForDisplay()` for formatted date display
-        holder.goalDeadline.text = model.getFormattedDateForDialog()
+        holder.goalDeadline.text = model.date
 
         // Update progress information
         holder.goalProgress.text = "${model.saved}/${model.target}"

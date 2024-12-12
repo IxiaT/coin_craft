@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -14,8 +15,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSaveListener, FinancialGoalsAdapter.UpdateBalanceListener, UpdateGoalDialogFragment.OnGoalUpdateListener {
 
-    private lateinit var goalsRecyclerView: RecyclerView
-    private lateinit var financialGoalsAdapter: FinancialGoalsAdapter
+    private lateinit var ongoingGoalsRecyclerView: RecyclerView
+    private lateinit var completedGoalsRecyclerView: RecyclerView
+    private lateinit var ongoingGoalsAdapter: FinancialGoalsAdapter
+    private lateinit var completedGoalsAdapter: FinancialGoalsAdapter
     private lateinit var goalList: MutableList<FinancialModel>  // Use FinancialModel here
     private lateinit var savedBalanceEdit: EditText
     private lateinit var plannedBalanceEdit: EditText
@@ -24,7 +27,7 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     private var plannedBalance: Double = 0.0
     private lateinit var progressIndicator: CircularProgressIndicator
     private lateinit var progressTextView: TextView
-
+    private lateinit var toggleViewButton: Button
     private lateinit var financialRepository: FinancialRepository
     private lateinit var userId: String
 
@@ -44,7 +47,18 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         progressIndicator = findViewById(R.id.financialGoalProgress)
         progressTextView = findViewById(R.id.progressPercentage)
         backBtn = findViewById(R.id.backbtn)
+        toggleViewButton = findViewById(R.id.toggle_view_button) // Initialize toggle button
 
+        toggleViewButton.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
+
+        // Initialize RecyclerViews
+        ongoingGoalsRecyclerView = findViewById(R.id.ongoingGoalsRecyclerView)
+        completedGoalsRecyclerView = findViewById(R.id.completedGoalsRecyclerView)
+
+        ongoingGoalsRecyclerView.layoutManager = LinearLayoutManager(this)
+        completedGoalsRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Set the click listener for the back button
         backBtn.setOnClickListener {
             val homeAct = Intent(this, Home::class.java)
             startActivity(homeAct)
@@ -57,9 +71,10 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
             dialogFragment.show(supportFragmentManager, "AddGoalDialog")
         }
 
-        // Setup RecyclerView
-        goalsRecyclerView = findViewById(R.id.goalsRecyclerView)
-        goalsRecyclerView.layoutManager = LinearLayoutManager(this)
+        // Setup RecyclerView toggle button
+        toggleViewButton.setOnClickListener {
+            toggleRecyclerViews() // Toggle between ongoing and completed goals
+        }
 
         // Fetch the goals data from Firebase
         fetchFinancialGoals()
@@ -69,33 +84,65 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     }
 
     private fun fetchFinancialGoals() {
-        // Fetch data from the repository (Firebase)
+        // Fetch the goals from Firebase and separate them based on their state
         financialRepository.getFinancialGoals(userId) { financialGoals, error ->
             if (error == null) {
-                // If no error, update the goal list and refresh the adapter
-                goalList = financialGoals.toMutableList()
-                financialGoalsAdapter = FinancialGoalsAdapter(this, goalList, supportFragmentManager, this)
-                goalsRecyclerView.adapter = financialGoalsAdapter
-                updateOverallBalance()
+                val ongoingGoalsList = financialGoals.filter { it.state == false }.toMutableList()
+                val completedGoalsList = financialGoals.filter { it.state == true }.toMutableList()
+
+                // Set up adapters for both RecyclerViews
+                ongoingGoalsAdapter = FinancialGoalsAdapter(this, ongoingGoalsList, supportFragmentManager, this)
+                completedGoalsAdapter = FinancialGoalsAdapter(this, completedGoalsList, supportFragmentManager, this)
+
+                // Set the adapters to the respective RecyclerViews
+                ongoingGoalsRecyclerView.adapter = ongoingGoalsAdapter
+                completedGoalsRecyclerView.adapter = completedGoalsAdapter
+
+                // Update the progress based on ongoing goals only
+                updateOverallBalance(ongoingGoalsList)
             } else {
-                // If there was an error, show a toast message
                 Toast.makeText(this, "Failed to fetch goals: $error", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // Switch between ongoing and completed RecyclerViews
+    private fun toggleRecyclerViews() {
+        if (ongoingGoalsRecyclerView.visibility == View.VISIBLE) {
+            // Switch to completed goals
+            ongoingGoalsRecyclerView.visibility = View.GONE
+            completedGoalsRecyclerView.visibility = View.VISIBLE
+            toggleViewButton.text = "Show Ongoing" // Update button text
+            toggleViewButton.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow))
+        } else {
+            // Switch to ongoing goals
+            ongoingGoalsRecyclerView.visibility = View.VISIBLE
+            completedGoalsRecyclerView.visibility = View.GONE
+            toggleViewButton.text = "Show Completed" // Update button text
+            toggleViewButton.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
+        }
+    }
+
     override fun onGoalSaved(newGoal: FinancialModel) {
-        // Add the goal to the local list and update the RecyclerView
+        // Add the goal to the ongoing list and update the RecyclerView
         goalList.add(newGoal)
-        financialGoalsAdapter.notifyItemInserted(goalList.size - 1)
+        ongoingGoalsAdapter.notifyItemInserted(goalList.size - 1)
         Toast.makeText(this, "New goal added: ${newGoal.name}", Toast.LENGTH_SHORT).show()
-        updateOverallBalance()
+        updateOverallBalance(goalList)  // Recalculate balance and progress
     }
 
     override fun onGoalUpdated(updatedGoal: FinancialModel) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        // Calling the repository to update the goal in Firebase
-        financialRepository.updateFinancialGoal(userId, updatedGoal.key ?: return, updatedGoal) { success, errorMessage ->
+
+        // Update the goal's state to true if it's complete
+        if (updatedGoal.percentage >= 100) {
+            updatedGoal.state = true
+        } else {
+            updatedGoal.state = false
+        }
+
+        // Call the repository to update the goal in Firebase
+        financialRepository.updateFinancialGoal(userId, updatedGoal.id ?: return, updatedGoal) { success, errorMessage ->
             if (success) {
                 fetchFinancialGoals()  // Reload the updated list of goals
                 Toast.makeText(this, "Goal updated", Toast.LENGTH_SHORT).show()
@@ -108,7 +155,7 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
     override fun onGoalDeleted(goal: FinancialModel) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         // Calling the repository to delete the goal in Firebase
-        financialRepository.deleteFinancialGoal(userId, goal.key ?: return) { success, errorMessage ->
+        financialRepository.deleteFinancialGoal(userId, goal.id ?: return) { success, errorMessage ->
             if (success) {
                 goalList.remove(goal)  // Remove the goal from the local list
                 Toast.makeText(this, "Goal deleted", Toast.LENGTH_SHORT).show()
@@ -138,9 +185,10 @@ class FinancialGoalsActivity : AppCompatActivity(), AddGoalDialogFragment.GoalSa
         })
     }
 
-    private fun updateOverallBalance() {
-        savedBalance = goalList.sumOf { it.saved }
-        plannedBalance = goalList.sumOf { it.target }
+    private fun updateOverallBalance(ongoingGoalsList: List<FinancialModel>) {
+        // Calculate saved and planned balance for ongoing goals only
+        savedBalance = ongoingGoalsList.sumOf { it.saved }
+        plannedBalance = ongoingGoalsList.sumOf { it.target }
         savedBalanceEdit.setText(savedBalance.toString())
         plannedBalanceEdit.setText(plannedBalance.toString())
         updateProgress()

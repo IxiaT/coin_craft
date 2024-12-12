@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FinancialGoalsAdapter(
     private val context: Context,
@@ -44,11 +46,25 @@ class FinancialGoalsAdapter(
             holder.goalRemaining.setTextColor(ContextCompat.getColor(context, R.color.red))
         }
 
-        // Set goal data
-        holder.goalIcon.setImageResource(goal.icon)
+        // Dynamically set goal icon using the map
+        val goalTypeToDrawableMap = mapOf(
+            "Investment" to R.drawable.ic_investment,
+            "Holiday" to R.drawable.ic_holiday,
+            "Gadget" to R.drawable.ic_gadget,
+            "Destination" to R.drawable.ic_destination,
+            "Shoes" to R.drawable.ic_shoes,
+            "Clothes" to R.drawable.ic_clothes,
+            "Other" to R.drawable.ic_others
+        )
+
+        val iconResId = goalTypeToDrawableMap[goal.type] ?: R.drawable.ic_others // Default to "Other" icon
+        holder.goalIcon.setImageResource(iconResId)
+
         holder.goalName.text = goal.name
         holder.goalProgress.text = "${goal.saved} / ${goal.target} - ${goal.percentage}%"
-        holder.goalDate.text = goal.getFormattedDateForDisplay()
+
+        // Format and display goal date
+        holder.goalDate.text = formatDateForDisplay(goal.date)
 
         // Item click listener to open update dialog fragment
         holder.itemView.setOnClickListener {
@@ -65,11 +81,22 @@ class FinancialGoalsAdapter(
         // Use the setOnGoalUpdateListener method to handle updates
         updateDialog.setOnGoalUpdateListener(object : UpdateGoalDialogFragment.OnGoalUpdateListener {
             override fun onGoalUpdated(updatedGoal: FinancialModel) {
-                // Update the goal in the list at the correct position
-                goals[position] = updatedGoal
-                // Notify that specific item has changed
-                notifyItemChanged(position)
-                updateBalanceListener.onGoalUpdated(updatedGoal) // Notify the parent activity of update
+                // Check if the goal's percentage has reached 100% and update the state
+                if (updatedGoal.percentage >= 100) {
+                    updatedGoal.state = true // Mark as completed
+                } else {
+                    updatedGoal.state = false // Mark as not completed
+                }
+
+                // Update the goal in the list
+                val position = goals.indexOfFirst { it.id == updatedGoal.id } // Find the position of the updated goal
+                if (position != -1) {
+                    goals[position] = updatedGoal
+                    notifyItemChanged(position) // Notify that specific item has changed
+                }
+
+                // Update the balance in the parent activity
+                updateBalanceListener.onGoalUpdated(updatedGoal)
             }
 
             override fun onGoalDeleted(deletedGoal: FinancialModel) {
@@ -77,10 +104,8 @@ class FinancialGoalsAdapter(
                 val positionToRemove = goals.indexOf(deletedGoal)
                 if (positionToRemove != -1) {
                     goals.removeAt(positionToRemove)
-                    // Notify that specific item has been removed
-                    notifyItemRemoved(positionToRemove)
-                    // Adjust the rest of the list by notifying any item changes
-                    notifyItemRangeChanged(positionToRemove, goals.size)
+                    notifyItemRemoved(positionToRemove) // Notify that specific item has been removed
+                    notifyItemRangeChanged(positionToRemove, goals.size) // Adjust the rest of the list
                     updateBalanceListener.onGoalDeleted(deletedGoal) // Notify the parent activity of delete
                 }
             }
@@ -88,6 +113,17 @@ class FinancialGoalsAdapter(
 
         // Show the dialog
         updateDialog.show(fragmentManager, "UpdateGoalDialog")
+    }
+
+    private fun formatDateForDisplay(date: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val parsedDate = inputFormat.parse(date) ?: return date
+            outputFormat.format(parsedDate)
+        } catch (e: Exception) {
+            date // Fallback to the original date string in case of parsing error
+        }
     }
 
     // Interface to notify updates
