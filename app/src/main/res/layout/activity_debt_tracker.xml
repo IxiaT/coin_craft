@@ -12,38 +12,36 @@
 
 
     <LinearLayout
-        android:id="@+id/topbar"
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="false"
-        android:background="#FFD700"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <ImageButton
-            android:id="@+id/backbtn"
+            android:id="@+id/back_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="#00FFFFFF"
-            app:srcCompat="@drawable/backbtn" />
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:padding="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/angle_left" />
 
         <TextView
-            android:id="@+id/topbartxt"
-            android:layout_width="200dp"
-            android:layout_height="33dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/silkscreen_bold"
-            android:gravity="start|center_vertical"
-            android:lineSpacingExtra="8sp"
-            android:text="Debt Tracker"
-            android:textSize="14sp" />
+            android:id="@+id/coin_craft"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/silkscreen"
+            android:text="debt tracker"
+            android:textAppearance="@style/coin_craft"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <TextView
@@ -55,15 +53,13 @@
         android:fontFamily="@font/silkscreen_regular"
         android:text="to receive"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topbar" />
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rview_topdebts"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="235dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="1dp"
+        android:layout_margin="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,10 +80,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rview_yourdebts"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="225dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
@@ -97,8 +93,8 @@
         android:id="@+id/newdebtbtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rview_yourdebts"
         app:srcCompat="@drawable/newbtn" />
@@ -114,7 +110,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         app:menu="@menu/bottom_nav_menu" />
 
 

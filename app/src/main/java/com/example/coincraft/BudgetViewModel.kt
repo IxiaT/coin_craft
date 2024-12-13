@@ -1,9 +1,11 @@
 package com.example.coincraft
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class BudgetViewModel : ViewModel() {
     private val repository = BudgetRepository()
+    val transactionUpdated = MutableLiveData<Boolean>()
 
     // Add a budget
     fun addBudget(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
@@ -46,5 +48,9 @@ class BudgetViewModel : ViewModel() {
         onComplete: (Boolean, String?) -> Unit
     ) {
         repository.deleteBudget(userId, budgetType, budgetId, onComplete)
+    }
+
+    fun observeBudge(userId: String, onComplete: (MutableList<BudgetModel>, MutableList<BudgetModel>, String?) -> Unit) {
+        repository.observeBudgets(userId, onComplete)
     }
 }

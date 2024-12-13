@@ -28,6 +28,7 @@ class TransactionAdapter(private val itemList: List<TransactionModel>, private v
             holder.Icon.setImageResource(earned)
         }
 
+        //Pass data to the Dialog
         holder.itemView.setOnClickListener {
             val dialog = UpdateTransaction()
             val bundle = Bundle()

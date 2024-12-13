@@ -121,7 +121,6 @@ class Home : AppCompatActivity() {
                 R.id.navigation_transaction -> {
                     intent = Intent(this@Home, Transaction::class.java)
                     startActivity(intent)
-                    finish()
                 }
                 R.id.navigation_budgeting-> {
                     intent = Intent(this@Home, BudgetingActivity::class.java)
@@ -130,7 +129,6 @@ class Home : AppCompatActivity() {
                 R.id.navigation_debt -> {
                     intent = Intent(this@Home, DebtTrackerActivity::class.java)
                     startActivity(intent)
-                    finish()
                 }
             }
 

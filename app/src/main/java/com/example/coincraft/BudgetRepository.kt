@@ -147,4 +147,47 @@ class BudgetRepository {
             .addOnSuccessListener { onComplete(true, null) }
             .addOnFailureListener { onComplete(false, it.message) }
     }
+
+    fun observeBudgets(
+        userId: String,
+        onChange: (MutableList<BudgetModel>, MutableList<BudgetModel>, String?) -> Unit
+    ) {
+        val needsRef = databaseReference.child(userId).child("BudgetNeeds")
+        val wantsRef = databaseReference.child(userId).child("BudgetWants")
+
+        val needsList = mutableListOf<BudgetModel>()
+        val wantsList = mutableListOf<BudgetModel>()
+
+        // Observe Needs
+        needsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                needsList.clear()
+                for (budgetSnapshot in snapshot.children) {
+                    val budget = budgetSnapshot.getValue(BudgetModel::class.java)
+                    budget?.let { needsList.add(it) }
+                }
+                onChange(needsList, wantsList, null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onChange(mutableListOf(), mutableListOf(), error.message)
+            }
+        })
+
+        // Observe Wants
+        wantsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                wantsList.clear()
+                for (budgetSnapshot in snapshot.children) {
+                    val budget = budgetSnapshot.getValue(BudgetModel::class.java)
+                    budget?.let { wantsList.add(it) }
+                }
+                onChange(needsList, wantsList, null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onChange(mutableListOf(), mutableListOf(), error.message)
+            }
+        })
+    }
 }
