@@ -5,42 +5,46 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.childEvents
 
 class BudgetRepository {
     private val databaseReference: DatabaseReference = FirebaseDatabase
         .getInstance()
-        .getReference("UserAccounts")
+        .getReference("Users")
 
     // Add Budget (Decides table based on budgetType)
-    fun addBudget(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
-        val budgetTypeTable = if (budget.budgetType.equals("Needs", ignoreCase = true)) {
-            "BudgetNeeds"
-        } else if (budget.budgetType.equals("Wants", ignoreCase = true)) {
-            "BudgetWants"
-        } else {
-            onComplete(false, "Invalid budget type. Use 'Needs' or 'Wants'")
-            return
-        }
+    fun addBudgetNeeds(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
+        val budgetRef = databaseReference.child(userId).child("Budget").child("Needs").push()
+        val budgetId = budgetRef.key
 
-        val budgetRef = databaseReference.child(userId).child(budgetTypeTable).push()
-        budgetRef.setValue(budget)
-            .addOnSuccessListener { onComplete(true, null) }
-            .addOnFailureListener { onComplete(false, it.message) }
+        if (budgetId != null) {
+            budgetRef.setValue(budget)
+                .addOnSuccessListener { onComplete(true, null) }
+                .addOnFailureListener { onComplete(false, it.message) }
+        } else {
+            onComplete(false, "Failed to generate budget ID")
+        }
     }
 
-    // Retrieve All Budgets (Needs or Wants)
-    fun getBudgets(
+    fun addBudgetWants(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
+        val budgetRef = databaseReference.child(userId).child("Budget").child("Wants").push()
+        val budgetId = budgetRef.key
+
+        if (budgetId != null) {
+            budgetRef.setValue(budget)
+                .addOnSuccessListener { onComplete(true, null) }
+                .addOnFailureListener { onComplete(false, it.message) }
+        } else {
+            onComplete(false, "Failed to generate budget ID")
+        }
+    }
+
+    fun getBudgetsNeeds(
         userId: String,
-        onComplete: (List<BudgetModel>, List<BudgetModel>, String?) -> Unit
+        onComplete: (List<BudgetModel>, String?) -> Unit
     ) {
-        val needsRef = databaseReference.child(userId).child("BudgetNeeds")
-        val wantsRef = databaseReference.child(userId).child("BudgetWants")
-
+        val needsRef = databaseReference.child(userId).child("Budget").child("Needs")
         val needsList = mutableListOf<BudgetModel>()
-        val wantsList = mutableListOf<BudgetModel>()
-
-        var needsCompleted = false
-        var wantsCompleted = false
 
         // Fetch Needs
         needsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -49,19 +53,21 @@ class BudgetRepository {
                     val budget = budgetSnapshot.getValue(BudgetModel::class.java)
                     budget?.let { needsList.add(it) }
                 }
-                needsCompleted = true
-                if (wantsCompleted) {
-                    onComplete(needsList, wantsList, null)
-                }
+                    onComplete(needsList, null)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                needsCompleted = true
-                if (wantsCompleted) {
-                    onComplete(emptyList(), emptyList(), error.message)
-                }
+                onComplete(emptyList(), error.message)
             }
         })
+    }
+
+    fun getBudgetsWants(
+        userId: String,
+        onComplete: (List<BudgetModel>, String?) -> Unit
+    ) {
+        val wantsRef = databaseReference.child(userId).child("Budget").child("Wants")
+        val wantsList = mutableListOf<BudgetModel>()
 
         // Fetch Wants
         wantsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -70,17 +76,11 @@ class BudgetRepository {
                     val budget = budgetSnapshot.getValue(BudgetModel::class.java)
                     budget?.let { wantsList.add(it) }
                 }
-                wantsCompleted = true
-                if (needsCompleted) {
-                    onComplete(needsList, wantsList, null)
-                }
+                onComplete(wantsList, null)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                wantsCompleted = true
-                if (needsCompleted) {
-                    onComplete(emptyList(), emptyList(), error.message)
-                }
+                    onComplete(emptyList(), error.message)
             }
         })
     }

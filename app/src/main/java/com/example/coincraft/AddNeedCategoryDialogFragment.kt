@@ -75,7 +75,7 @@ class AddNeedCategoryDialogFragment: DialogFragment() {
     private fun saveBudget() {
         val amountText = amountLimit.text.toString()
         val category = categorySpinner.selectedItem.toString()
-        val type = "needs"
+        val type = "Needs"
 
         if (amountText.isBlank() || category.isBlank()) {
             Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show()
@@ -89,12 +89,11 @@ class AddNeedCategoryDialogFragment: DialogFragment() {
         }
 
         val budget = BudgetModel(
-            budgetType = type,
             budgetCategory = category,
             budgetLimit = amount
         )
 
-        budgetViewModel.addBudget(userId, budget) { success, error ->
+        budgetViewModel.addBudgetNeeds(userId, budget) { success, error ->
             if (success) {
                 Toast.makeText(requireContext(), "Budget added successfully", Toast.LENGTH_SHORT)
                     .show()

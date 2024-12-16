@@ -134,10 +134,24 @@ class BudgetingActivity : AppCompatActivity() {
         val fragment = supportFragmentManager.findFragmentById(R.id.budget_main_fragment)
 
         if (fragment != null) {
-            // Pass data to the fragment
+            // Remove the current fragment
             supportFragmentManager.beginTransaction()
-                .detach(fragment) // Remove the fragment
-                .attach(fragment) // Re-add the same fragment to refresh
+                .remove(fragment)
+                .commit()
+
+            // Wait for the transaction to finish
+            supportFragmentManager.executePendingTransactions()
+
+            // Recreate and replace the fragment with updated arguments
+            val newFragment = BudgetingMainFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("month", currentMonth)
+                    putInt("year", currentYear)
+                }
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.budget_main_fragment, newFragment)
                 .commit()
         }
     }

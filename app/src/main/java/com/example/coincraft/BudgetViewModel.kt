@@ -8,16 +8,27 @@ class BudgetViewModel : ViewModel() {
     val transactionUpdated = MutableLiveData<Boolean>()
 
     // Add a budget
-    fun addBudget(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
-        repository.addBudget(userId, budget, onComplete)
+    fun addBudgetNeeds(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
+        repository.addBudgetNeeds(userId, budget, onComplete)
+    }
+
+    fun addBudgetWants(userId: String, budget: BudgetModel, onComplete: (Boolean, String?) -> Unit) {
+        repository.addBudgetWants(userId, budget, onComplete)
     }
 
     // Retrieve all budgets (Needs and Wants separately)
-    fun getBudgets(
+    fun getBudgetNeeds(
         userId: String,
-        onComplete: (List<BudgetModel>, List<BudgetModel>, String?) -> Unit
+        onComplete: (List<BudgetModel>, String?) -> Unit
     ) {
-        repository.getBudgets(userId, onComplete)
+        repository.getBudgetsNeeds(userId, onComplete)
+    }
+
+    fun getBudgetWants(
+        userId: String,
+        onComplete: (List<BudgetModel>, String?) -> Unit
+    ) {
+        repository.getBudgetsWants(userId, onComplete)
     }
 
     // Compute total limit for a specific budget type (Needs or Wants)
