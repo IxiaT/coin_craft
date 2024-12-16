@@ -23,14 +23,14 @@ class BudgetAdapter(private val List:List<BudgetModel>, private val fragmentMana
         holder.Category.text = currentItem.budgetCategory
         holder.Amounts.text = currentItem.budgetLimit.toString()
 
-        holder.itemView.setOnClickListener {
-            val dialog = UpdateTransaction()
-            val bundle = Bundle()
+//        holder.itemView.setOnClickListener {
+//            val dialog = UpdateBudget()
+//            val bundle = Bundle()
 //            bundle.putSerializable("item", item)
 //            bundle.putString("type", type)
-            dialog.arguments = bundle
-            dialog.show(fragmentManager, "UpdateTransactionDialog")
-        }
+//            dialog.arguments = bundle
+//            dialog.show(fragmentManager, "UpdateBudgetDialog")
+//        }
     }
 
     class ViewHolderClass(itemView: View): RecyclerView.ViewHolder(itemView) {
