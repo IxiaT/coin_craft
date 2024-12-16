@@ -99,15 +99,14 @@ class BudgetingActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.navigation_budgeting-> {
-                    intent = Intent(this@BudgetingActivity, BudgetingActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.navigation_debt -> {
                     if (this !is BudgetingActivity){
-                        intent = Intent(this@BudgetingActivity, DebtTrackerActivity::class.java)
+                        intent = Intent(this@BudgetingActivity, BudgetingActivity::class.java)
                         startActivity(intent)
                     }
-
+                }
+                R.id.navigation_debt -> {
+                    intent = Intent(this@BudgetingActivity, DebtTrackerActivity::class.java)
+                    startActivity(intent)
                 }
             }
 
