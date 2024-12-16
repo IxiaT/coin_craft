@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 class WantsAdapter (private val dataList:ArrayList<NeedWantDataClass>): RecyclerView.Adapter<WantsAdapter.ViewHolderClass>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.itemneedwant,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_need_want,parent,false)
         return ViewHolderClass(itemView)
     }
 

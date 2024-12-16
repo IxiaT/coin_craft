@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Calendar
 
 class Transaction : AppCompatActivity() {
@@ -29,6 +30,7 @@ class Transaction : AppCompatActivity() {
     private lateinit var earnedRV: RecyclerView
     private lateinit var totalSpentAmount: TextView
     private lateinit var totalEarnedAmount: TextView
+    private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var expenseViewModel: ExpenseViewModel
     private lateinit var incomeViewModel: IncomeViewModel
@@ -50,6 +52,7 @@ class Transaction : AppCompatActivity() {
         totalSpentAmount = findViewById(R.id.spent_total)
         monthSpentSpinner = findViewById(R.id.spent_month_spinner)
         monthEarnedSpinner = findViewById(R.id.earned_month_spinner)
+        bottomNav = findViewById(R.id.botnav)
 
         //Initialize ViewModel
         expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
@@ -108,6 +111,52 @@ class Transaction : AppCompatActivity() {
                 fetchEarned(earnedSelectedMonth) // Reload your RecyclerView or data
                 incomeViewModel.transactionUpdated.postValue(false) // Reset state
             }
+        }
+
+        bottomNav.selectedItemId = R.id.navigation_transaction
+
+        // Change intent to your respective activities
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            val itemId = item.itemId
+            var intent: Intent
+
+            when (itemId) {
+                R.id.navigation_home -> {
+                    intent = Intent(this@Transaction, Home::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.navigation_transaction -> {
+                    if(this !is Transaction){
+                        intent = Intent(this@Transaction, Transaction::class.java)
+                        startActivity(intent)
+                    }
+                }
+                R.id.navigation_budgeting-> {
+                    intent = Intent(this@Transaction, BudgetingActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.navigation_debt -> {
+                    intent = Intent(this@Transaction, DebtTrackerActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            val selectedItem = bottomNav.findViewById<View>(item.itemId)
+            selectedItem?.animate()?.apply {
+                scaleX(1.2f)
+                scaleY(1.2f)
+                duration = 100
+                withEndAction {
+                    selectedItem.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(100)
+                        .start()
+                }
+            }?.start()
+
+            true
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

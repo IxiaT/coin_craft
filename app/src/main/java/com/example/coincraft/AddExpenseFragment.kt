@@ -150,11 +150,6 @@ class AddExpenseFragment: DialogFragment() {
         val date = dateEditText.text.toString()
         val note = noteEditText.text.toString()
 
-        if (amountText.isBlank() || category.isBlank() || date.isBlank()) {
-            Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         when (selectedButton) {
             "MONEY_IN" -> {
                 val amount = amountText.toDoubleOrNull()

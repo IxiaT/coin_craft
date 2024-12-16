@@ -121,7 +121,6 @@ class Home : AppCompatActivity() {
                 R.id.navigation_transaction -> {
                     intent = Intent(this@Home, Transaction::class.java)
                     startActivity(intent)
-                    finish()
                 }
                 R.id.navigation_budgeting-> {
                     intent = Intent(this@Home, BudgetingActivity::class.java)
@@ -130,7 +129,6 @@ class Home : AppCompatActivity() {
                 R.id.navigation_debt -> {
                     intent = Intent(this@Home, DebtTrackerActivity::class.java)
                     startActivity(intent)
-                    finish()
                 }
             }
 
@@ -204,19 +202,19 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun fetchExpenses() {
-        expenseViewModel.getTotalExpenses(userId) { totalSpent, error ->
-            if (error == null) {
-                // Successfully retrieved expenses
-                Log.d("ExpensesActivity", "Expenses: $totalSpent")
-                spentAmount.text = totalSpent.toString()
-            } else {
-                // Handle error
-                Log.e("ExpensesActivity", "Error fetching expenses: $error")
-                Toast.makeText(this, "Error fetching expenses", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun fetchExpenses() {
+//        expenseViewModel.getTotalExpenses(userId) { totalSpent, error ->
+//            if (error == null) {
+//                // Successfully retrieved expenses
+//                Log.d("ExpensesActivity", "Expenses: $totalSpent")
+//                spentAmount.text = totalSpent.toString()
+//            } else {
+//                // Handle error
+//                Log.e("ExpensesActivity", "Error fetching expenses: $error")
+//                Toast.makeText(this, "Error fetching expenses", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 
     private fun calculatePercentage() {
         expenseViewModel.getTotalExpenses(userId) { totalExpenses, expenseError ->

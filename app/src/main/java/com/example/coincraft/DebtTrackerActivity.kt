@@ -70,8 +70,8 @@ class DebtTrackerActivity : AppCompatActivity(), NewDebtDialogFragment.OnDebtAdd
                     finish()
                 }
                 R.id.navigation_budgeting -> {
-//                    intent = Intent(this@Home, Budgeting::class.java)
-//                    startActivity(intent)
+                    intent = Intent(this@DebtTrackerActivity, BudgetingActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.navigation_debt -> {
                     if (this@DebtTrackerActivity !is DebtTrackerActivity) {
